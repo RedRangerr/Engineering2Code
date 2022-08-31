@@ -11,4 +11,3 @@ def calc_note_length(num_beats, bpm):
     #2 beat = 1 second
 
 
-
