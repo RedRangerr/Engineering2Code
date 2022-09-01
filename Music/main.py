@@ -9,18 +9,25 @@ BPM = 140
 OCTAVE_OFFSET = 1
 
 def crazy_train():
-    first_line()
-    second_line()
-    third_line()
-    fourth_line()
-    fifth_line()
-    sixth_line()
-    seventh_line()
-    eigth_line()
-    line_9_to_13()
+    # first_line()
+    # second_line()
+    # third_line()
+    # fourth_line()
+    # fifth_line()
+    # sixth_line()
+    # seventh_line()
+    # eigth_line()
+    # line_9_to_13()
     line_end()
     first_line()
     second_line()
+    sine(calc_octative(D_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
+    sine(calc_octative(C_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
+    sine(calc_octative(D_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(1, BPM))
+    time.sleep(calc_note_length(0.5, BPM))
+    sine(calc_octative(A_BASE_FREQUENCY, 4 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
+    sine(calc_octative(C_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
+    sine(calc_octative(D_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
 
 def first_line():
     for i in range(2):
