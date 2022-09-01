@@ -1,23 +1,49 @@
-from util import *
-from Constants import *
 from pysine import sine
-import util
 import time
 #https://www.virtualsheetmusic.com/score/HL-42568.html
+
+C_BASE_FREQUENCY = 16.35
+C_SHARP_BASE_FREQUENCY = 17.32
+D_FREQUENCY = 18.35
+D_SHARP_BASE_FREQUENCY = 19.45
+E_BASE_FREQUENCY = 20.6
+F_BASE_FREQUENCY = 21.83
+F_SHARP_BASE_FREQUENCY = 23.12
+G_BASE_FREQUENCY = 24.5
+G_SHARP_BASE_FREQUENCY = 25.96
+A_BASE_FREQUENCY = 27.5
+A_SHARP_BASE_FREQUENCY = 29.14
+B_BASE_FREQUENCY = 30.87
+
+# 2^(octave) * base_frequency
+def calc_octative(base_frequency, octave):
+    return 2 ** (octave) * base_frequency
+
+def calc_note_length(num_beats, bpm):
+    seconds_per_beat = 1/(bpm/60)
+    return seconds_per_beat * num_beats
+    #120 bpm = 2 beat per second --> 0.5 seconds per beat    
+    #2 beat = 1 second
+
+
 BPM = 140
+
+
+
+
 
 OCTAVE_OFFSET = 1
 
 def crazy_train():
-    # first_line()
-    # second_line()
-    # third_line()
-    # fourth_line()
-    # fifth_line()
-    # sixth_line()
-    # seventh_line()
-    # eigth_line()
-    # line_9_to_13()
+    first_line()
+    second_line()
+    third_line()
+    fourth_line()
+    fifth_line()
+    sixth_line()
+    seventh_line()
+    eigth_line()
+    line_9_to_13()
     line_end()
     first_line()
     second_line()
@@ -157,7 +183,7 @@ def sixth_line():
     sine(calc_octative(A_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
     sine(calc_octative(F_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(1.5, BPM))
     sine(calc_octative(E_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(1.5, BPM))
-    time.sleep(calc_note_length(EIGHTH_NOTE + WHOLE_NOTE, BPM))
+    time.sleep(calc_note_length(1.5, BPM))
     #2nd part
     sine(calc_octative(E_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
     sine(calc_octative(F_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
@@ -190,7 +216,7 @@ def eigth_line():
     sine(calc_octative(A_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
     sine(calc_octative(F_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(1.5, BPM))
     sine(calc_octative(E_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(1.5, BPM))
-    time.sleep(calc_note_length(EIGHTH_NOTE + WHOLE_NOTE, BPM))
+    time.sleep(calc_note_length(1.5, BPM))
     sine(calc_octative(E_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
     sine(calc_octative(E_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
     sine(calc_octative(F_SHARP_BASE_FREQUENCY, 5 + OCTAVE_OFFSET), calc_note_length(0.5, BPM))
