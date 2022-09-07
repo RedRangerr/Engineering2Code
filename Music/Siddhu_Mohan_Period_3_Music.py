@@ -1,6 +1,7 @@
 from pysine import sine
 import time
-#https://www.virtualsheetmusic.com/score/HL-42568.html
+
+#Siddhu Mohan A-3, Crazy Train by Ozzy Osbourne
 
 C_BASE_FREQUENCY = 16.35
 C_SHARP_BASE_FREQUENCY = 17.32
@@ -27,10 +28,6 @@ def calc_note_length(num_beats, bpm):
 
 
 BPM = 140
-
-
-
-
 
 OCTAVE_OFFSET = 1
 
