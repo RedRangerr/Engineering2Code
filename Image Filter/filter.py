@@ -54,8 +54,8 @@ yellow_paper[0:image_height,0:image_width, 0:image_channels] = [0,255,255]
 #                                        dtype = "uint8")
 # max_grayscale_for_yellow = numpy.array(max_grayscale_for_yellow,
 #                                        dtype = "uint8")
-min_grayscale_for_red, max_grayscale_for_red = create_depth_mask(0,100)
-min_grayscale_for_yellow, max_grayscale_for_yellow = create_depth_mask(101, 255)
+min_grayscale_for_red, max_grayscale_for_red = create_grayscale_arr(0,100)
+min_grayscale_for_yellow, max_grayscale_for_yellow = create_grayscale_arr(100, 255)
 
 
 block_all_but_the_red_parts = cv2.inRange(grayscale_image,
