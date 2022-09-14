@@ -2,16 +2,16 @@ import cv2
 import numpy as np
 
 #returns a depth mask for a specific color given a minimum and maximum gray value base on a min and max value
-#in:min_gray: float
-#in:max_gray: float
+#in:min_gray: float, minimum gray value
+#in:max_gray: float, maximum gray value
 #out: [numpy.ndarry, numpy.ndarry]
 def create_grayscale_arr(min_gray, max_gray):
     min_grayscale = [min_gray, min_gray, min_gray]
     max_grayscale = [max_gray, max_gray, max_gray]
     return [np.array(min_grayscale, dtype = "uint8"), np.array(max_grayscale, dtype = "uint8")]
 
-#returns a image 
-
+#returns a image that has only one color and black based on filtering grayscale values
+#in:grayscale_image: 
 def create_image_part(grayscale_image, min_grayscale, max_grayscale, color):
     min_grayscale_arr,max_grayscale_arr = create_grayscale_arr(min_grayscale, max_grayscale)
     block_all_but_certain_color = cv2.inRange(grayscale_image,min_grayscale_arr, max_grayscale_arr)
