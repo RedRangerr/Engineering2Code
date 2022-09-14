@@ -11,7 +11,8 @@ def create_grayscale_arr(min_gray, max_gray):
     return [np.array(min_grayscale, dtype = "uint8"), np.array(max_grayscale, dtype = "uint8")]
 
 def create_image_part(grayscale_image, min_grayscale, max_grayscale, color):
-    block_all_but_certain_color = cv2.inRange(grayscale_image,min_grayscale,max_grayscale)
+    min_grayscale_arr,max_grayscale_arr = create_grayscale_arr(min_grayscale, max_grayscale)
+    block_all_but_certain_color = cv2.inRange(grayscale_image,min_grayscale_arr, max_grayscale_arr)
     image_height = grayscale_image.shape[0]
     image_width = grayscale_image.shape[1]
     image_channels = grayscale_image.shape[2]

@@ -67,10 +67,13 @@ block_all_but_the_yellow_parts = cv2.inRange(grayscale_image,
                                              max_grayscale_for_yellow)
 print(block_all_but_the_yellow_parts)
 #creates images of red and yellow images and a combined image which has red and yellow
-red_parts_of_image = cv2.bitwise_or(red_paper, red_paper,
-                                    mask = block_all_but_the_red_parts)
-yellow_parts_of_image = cv2.bitwise_or(yellow_paper, yellow_paper,
-                                       mask = block_all_but_the_yellow_parts)
+# red_parts_of_image = cv2.bitwise_or(red_paper, red_paper,
+#                                     mask = block_all_but_the_red_parts)
+# yellow_parts_of_image = cv2.bitwise_or(yellow_paper, yellow_paper,
+#                                        mask = block_all_but_the_yellow_parts)
+
+red_parts_of_image = create_image_part(grayscale_image, 0, 100, [0,0,255])
+yellow_parts_of_image = create_image_part(grayscale_image, 101, 255, [0,255,255])
 
 customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
 
