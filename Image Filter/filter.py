@@ -31,17 +31,24 @@ cv2.namedWindow('Customized Image')
 
 #creates images of red and yellow images and a combined image which has red and yellow
 red_parts_of_image = create_image_part(grayscale_image, 0, 50, [0,0,255])
-yellow_parts_of_image = create_image_part(grayscale_image, 51, 160, [0,255,255])
-green_parts_of_image = create_image_part(grayscale_image, 161, 255, [0,255,0])
-
+yellow_parts_of_image = create_image_part(grayscale_image, 51, 120, [0,255,255])
+green_parts_of_image = create_image_part(grayscale_image, 121, 180, [0,255,0])
+blue_parts_of_image = create_image_part(grayscale_image, 181, 220, [255, 0, 0])
+#30,230,250
+purple_parts_of_image = create_image_part(grayscale_image, 221, 255, [250, 230, 30])
 
 customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
 customized_image = cv2.bitwise_or(customized_image, green_parts_of_image)
+customized_image = cv2.bitwise_or(customized_image, blue_parts_of_image)
+customized_image = cv2.bitwise_or(customized_image, purple_parts_of_image)
+
+
+
 
 cv2.imshow('Original Image', original_image)
 cv2.imshow('Grayscale Image',grayscale_image)
 cv2.imshow('Red Parts of Image',red_parts_of_image)
-cv2.imshow('Yellow Parts of Image',yellow_parts_of_image)
+cv2.imshow('Yellow Parts of Image',purple_parts_of_image)
 cv2.imshow('Customized Image',customized_image)
 
 keypressed = cv2.waitKey(0)
