@@ -40,7 +40,7 @@ yellow_paper = numpy.zeros((image_height,image_width,image_channels),
 red_paper[0:image_height,0:image_width, 0:image_channels] = [0,0,255]
 yellow_paper[0:image_height,0:image_width, 0:image_channels] = [0,255,255]
 #creates a threshold for depth masks to remove saturation
-grayscale_break = 128
+grayscale_break = 100
 
 min_grayscale_for_red = [0,0,0]
 max_grayscale_for_red = [grayscale_break,grayscale_break,grayscale_break]
