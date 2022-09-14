@@ -5,6 +5,8 @@ import cv2
 import numpy
 import os.path
 
+#test
+
 #gets the image from the user
 print ("Save your original image in the same folder as this program.")
 filename_valid = False
