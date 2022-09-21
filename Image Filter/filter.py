@@ -27,28 +27,30 @@ cv2.namedWindow('Red Parts of Image')
 cv2.namedWindow('Yellow Parts of Image')
 cv2.namedWindow('Customized Image')
 
+keypressed = cv2.waitKey(30)
 
-#creates images of red and yellow images and a combined image which has red and yellow
-red_parts_of_image = create_image_part(grayscale_image, 0, 50, [0,0,255])
-yellow_parts_of_image = create_image_part(grayscale_image, 51, 120, [0,255,255])
-green_parts_of_image = create_image_part(grayscale_image, 121, 180, [0,255,0])
-blue_parts_of_image = create_image_part(grayscale_image, 181, 220, [255, 0, 0])
-#30,230,250
-purple_parts_of_image = create_image_part(grayscale_image, 221, 255, [250, 230, 30])
+while keypressed != 27 and keypressed != ord('s'):
+    #creates images of red and yellow images and a combined image which has red and yellow
+    red_parts_of_image = create_image_part(grayscale_image, 0, 50, [0,0,255])
+    yellow_parts_of_image = create_image_part(grayscale_image, 51, 120, [0,255,255])
+    green_parts_of_image = create_image_part(grayscale_image, 121, 180, [0,255,0])
+    blue_parts_of_image = create_image_part(grayscale_image, 181, 220, [255, 0, 0])
+    #30,230,250
+    purple_parts_of_image = create_image_part(grayscale_image, 221, 255, [250, 230, 30])
 
-customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
-customized_image = cv2.bitwise_or(customized_image, green_parts_of_image)
-customized_image = cv2.bitwise_or(customized_image, blue_parts_of_image)
-customized_image = cv2.bitwise_or(customized_image, purple_parts_of_image)
+    customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
+    customized_image = cv2.bitwise_or(customized_image, green_parts_of_image)
+    customized_image = cv2.bitwise_or(customized_image, blue_parts_of_image)
+    customized_image = cv2.bitwise_or(customized_image, purple_parts_of_image)
 
 
-cv2.imshow('Red Parts of Image',red_parts_of_image)
-cv2.imshow('Yellow Parts of Image',purple_parts_of_image)
-cv2.imshow('Customized Image',customized_image)
+    cv2.imshow('Red Parts of Image',red_parts_of_image)
+    cv2.imshow('Yellow Parts of Image',purple_parts_of_image)
+    cv2.imshow('Customized Image',customized_image)
 
-keypressed = cv2.waitKey(0)
-if keypressed == 27:
-    cv2.destroyAllWindows()
-elif keypressed == ord('s'): 
-        cv2.imwrite(input('Save Customized Image as:'),customized_image)
+    keypressed = cv2.waitKey(0)
+    if keypressed == 27:
         cv2.destroyAllWindows()
+    elif keypressed == ord('s'): 
+            cv2.imwrite(input('Save Customized Image as:'),customized_image)
+            cv2.destroyAllWindows()
