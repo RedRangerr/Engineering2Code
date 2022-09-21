@@ -22,21 +22,27 @@ grayscale_image_simple = cv2.imread(filename, 0)
 grayscale_image = cv2.cvtColor(grayscale_image_simple, cv2.COLOR_GRAY2BGR)
 
 #creates windows
-
-cv2.namedWindow('Red Parts of Image')
-cv2.namedWindow('Yellow Parts of Image')
+cv2.namedWindow("Trackbar")
 cv2.namedWindow('Customized Image')
+
+#create sliders
+cv2.createTrackbar("Color1Break", "Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color2Break", "Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color3Break", "Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color4Break", "Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color5Break", "Trackbar", 0, 255, lambda x:None)
+
+
 
 keypressed = cv2.waitKey(30)
 
 while keypressed != 27 and keypressed != ord('s'):
     #creates images of red and yellow images and a combined image which has red and yellow
-    red_parts_of_image = create_image_part(grayscale_image, 0, 50, [0,0,255])
-    yellow_parts_of_image = create_image_part(grayscale_image, 51, 120, [0,255,255])
-    green_parts_of_image = create_image_part(grayscale_image, 121, 180, [0,255,0])
-    blue_parts_of_image = create_image_part(grayscale_image, 181, 220, [255, 0, 0])
-    #30,230,250
-    purple_parts_of_image = create_image_part(grayscale_image, 221, 255, [250, 230, 30])
+    red_parts_of_image = create_image_part(grayscale_image, 0, cv2.getTrackbarPos("Color1Break", "Trackbar"), [0,0,255])
+    yellow_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color1Break", "Trackbar")+1, cv2.getTrackbarPos("Color2Break", "Trackbar"), [0,255,255])
+    green_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color2Break", "Trackbar")+1, cv2.getTrackbarPos("Color3Break", "Trackbar"), [0,255,0])
+    blue_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color3Break", "Trackbar")+1, cv2.getTrackbarPos("Color4Break", "Trackbar"), [255, 0, 0])
+    purple_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color4Break", "Trackbar")+1, cv2.getTrackbarPos("Color5Break", "Trackbar"), [250, 230, 30])
 
     customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
     customized_image = cv2.bitwise_or(customized_image, green_parts_of_image)
@@ -48,7 +54,7 @@ while keypressed != 27 and keypressed != ord('s'):
     cv2.imshow('Yellow Parts of Image',purple_parts_of_image)
     cv2.imshow('Customized Image',customized_image)
 
-    keypressed = cv2.waitKey(0)
+    keypressed = cv2.waitKey(30)
     if keypressed == 27:
         cv2.destroyAllWindows()
     elif keypressed == ord('s'): 
