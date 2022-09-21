@@ -21,9 +21,8 @@ original_image = cv2.imread(filename,1)
 grayscale_image_simple = cv2.imread(filename, 0)
 grayscale_image = cv2.cvtColor(grayscale_image_simple, cv2.COLOR_GRAY2BGR)
 
-#creates winows
-cv2.namedWindow('Original Image')
-cv2.namedWindow('Grayscale Image')
+#creates windows
+
 cv2.namedWindow('Red Parts of Image')
 cv2.namedWindow('Yellow Parts of Image')
 cv2.namedWindow('Customized Image')
@@ -43,10 +42,6 @@ customized_image = cv2.bitwise_or(customized_image, blue_parts_of_image)
 customized_image = cv2.bitwise_or(customized_image, purple_parts_of_image)
 
 
-
-
-cv2.imshow('Original Image', original_image)
-cv2.imshow('Grayscale Image',grayscale_image)
 cv2.imshow('Red Parts of Image',red_parts_of_image)
 cv2.imshow('Yellow Parts of Image',purple_parts_of_image)
 cv2.imshow('Customized Image',customized_image)
@@ -55,6 +50,5 @@ keypressed = cv2.waitKey(0)
 if keypressed == 27:
     cv2.destroyAllWindows()
 elif keypressed == ord('s'): 
-    cv2.imwrite('photo_GS_1.jpg',grayscale_image)
-    cv2.imwrite('photo_RY_1.jpg',customized_image)
-    cv2.destroyAllWindows()
+        cv2.imwrite(input('Save Customized Image as:'),customized_image)
+        cv2.destroyAllWindows()
