@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+import os
 #returns a depth mask for a specific color given a minimum and maximum gray value base on a min and max value
 #in:min_gray: float, minimum gray value
 #in:max_gray: float, maximum gray value
@@ -22,5 +22,13 @@ def create_image_part(grayscale_image, min_grayscale, max_grayscale, color):
     paper[0:image_height,0:image_width, 0:image_channels] = color
     return cv2.bitwise_or(paper, paper, mask= block_all_but_certain_color)    
 
-    
+#save an image safely
+def save_image(file_name, image, extra = ''):
+    if not os.path.isdir('Output'):
+        os.makedirs('Output')
+    root, ext = os.path.splitext(file_name)
+    root += extra
+    if not ext:
+        ext = '.jpeg'
+    cv2.imwrite('Output/'+root+ext, image)    
     
