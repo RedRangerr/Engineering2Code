@@ -38,19 +38,18 @@ grayscale_image_simple = cv2.imread(filename, 0)
 grayscale_image = cv2.cvtColor(grayscale_image_simple, cv2.COLOR_GRAY2BGR)
 
 #creates windows
-cv2.namedWindow("gray_Trackbar")
 cv2.namedWindow("color_Trackbar")
 cv2.namedWindow('Customized Image')
 cv2.namedWindow("Original Image")
 cv2.namedWindow("Grayscale Image")
 
 #create sliders for grayscale breaks
-cv2.createTrackbar("Color1Break", "gray_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color2Break", "gray_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color3Break", "gray_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color4Break", "gray_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color5Break", "gray_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color6Break", "gray_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color1Break", "Customized Image", 0, 255, lambda x:None)
+# cv2.createTrackbar("Color2Break", "gray_Trackbar", 0, 255, lambda x:None)
+# cv2.createTrackbar("Color3Break", "gray_Trackbar", 0, 255, lambda x:None)
+# cv2.createTrackbar("Color4Break", "gray_Trackbar", 0, 255, lambda x:None)
+# cv2.createTrackbar("Color5Break", "gray_Trackbar", 0, 255, lambda x:None)
+# cv2.createTrackbar("Color6Break", "gray_Trackbar", 0, 255, lambda x:None)
 
 #create sliders for color changes
 cv2.createTrackbar("Color1B", "color_Trackbar", 0, 255, lambda x:None)
@@ -84,12 +83,19 @@ keypressed = cv2.waitKey(30)
 
 while keypressed != 27 and keypressed != ord('s'):
     #creates images of red and yellow images and a combined image which has red and yellow
-    red_parts_of_image = create_image_part(grayscale_image, 0, cv2.getTrackbarPos("Color1Break", "gray_Trackbar"), [0,0,255])
-    yellow_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color1Break", "gray_Trackbar")+1, cv2.getTrackbarPos("Color2Break", "gray_Trackbar"), [0,255,255])
-    green_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color2Break", "gray_Trackbar")+1, cv2.getTrackbarPos("Color3Break", "gray_Trackbar"), [0,255,0])
-    blue_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color3Break", "gray_Trackbar")+1, cv2.getTrackbarPos("Color4Break", "gray_Trackbar"), [255, 0, 0])
-    purple_parts_of_image = create_image_part(grayscale_image, cv2.getTrackbarPos("Color4Break", "gray_Trackbar")+1, cv2.getTrackbarPos("Color5Break", "gray_Trackbar"), [250, 230, 30])
-    gold_parts_of_image = create_image_part(grayscale_image,  cv2.getTrackbarPos("Color5Break", "gray_Trackbar")+1, cv2.getTrackbarPos("Color6Break", "gray_Trackbar"), [38,162,193])
+    break_1 = cv2.getTrackbarPos("Color1Break", "Customized Image")
+    break_2 = (break_1/6) * 2
+    break_3 = (break_1/6) * 3
+    break_4 = (break_1/6) * 4
+    break_5 = (break_1/6) * 5
+    break_6 = (break_1/6) * 6
+
+    red_parts_of_image = create_image_part(grayscale_image, 0, break_1, [0,0,255])
+    yellow_parts_of_image = create_image_part(grayscale_image, break_1+1, break_2, [0,255,255])
+    green_parts_of_image = create_image_part(grayscale_image, break_2+1, break_3, [0,255,0])
+    blue_parts_of_image = create_image_part(grayscale_image, break_3+1, break_4, [255, 0, 0])
+    purple_parts_of_image = create_image_part(grayscale_image, break_4+1, break_5, [250, 230, 30])
+    gold_parts_of_image = create_image_part(grayscale_image,  break_5+1, break_6, [38,162,193])
 
     customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
     customized_image = cv2.bitwise_or(customized_image, green_parts_of_image)
