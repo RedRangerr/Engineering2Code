@@ -3,18 +3,20 @@
 
 import cv2
 import numpy
+import os
 import os.path
 from logic import *
 
 """
 Requirements
-    Output: Original Image, Grayscale image, and Customized Image.
-    Make Instructions
-    Make Save option
-Bonus: Save/Import Color combos
-Bonus: More than Six colors
-    Add comments
-    Change colors
+    [X]Output: Original Image, Grayscale image, and Customized Image.
+    []Change colors
+    []Make Instructions
+    []Make Save option
+    []Bonus: Save/Import Color combos   
+    []Bonus: More than Six colors
+    []Add comments
+    
 """
 
 
@@ -76,6 +78,8 @@ cv2.createTrackbar("Color6G", "color_Trackbar", 0, 255, lambda x:None)
 cv2.createTrackbar("Color6R", "color_Trackbar", 0, 255, lambda x:None)
 
 
+
+
 keypressed = cv2.waitKey(30)
 
 while keypressed != 27 and keypressed != ord('s'):
@@ -104,6 +108,8 @@ while keypressed != 27 and keypressed != ord('s'):
         cv2.destroyAllWindows()
     elif keypressed == ord('s'): 
         file_name = input('Save Customized Image as:')
-        cv2.imwrite("OutputImages/"+file_name,customized_image)
+        save_image(file_name, customized_image)
+        save_image(file_name, grayscale_image, '_grayscale')
+        save_image(file_name, original_image, '_original')
         cv2.destroyAllWindows()
 
