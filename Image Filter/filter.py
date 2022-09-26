@@ -5,6 +5,19 @@ import cv2
 import numpy
 import os.path
 from logic import *
+
+"""
+Requirements
+    Output: Original Image, Grayscale image, and Customized Image.
+    Make Instructions
+    Make Save option
+Bonus: Save/Import Color combos
+Bonus: More than Six colors
+    Add comments
+    Change colors
+"""
+
+
 #gets the image from the user
 print ("Save your original image in the same folder as this program.")
 filename_valid = False
