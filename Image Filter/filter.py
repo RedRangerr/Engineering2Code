@@ -5,6 +5,7 @@ import cv2
 import numpy
 import os
 import os.path
+import json
 from logic import *
 
 """
@@ -71,12 +72,14 @@ cv2.createTrackbar("Color6B", "color_Trackbar", 0, 255, lambda x:refresh_image(g
 cv2.createTrackbar("Color6G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
 cv2.createTrackbar("Color6R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
 
-cv2.createTrackbar("Color7B", "color_Trackbar", 0, 255, lambda x:refresh_image())
-cv2.createTrackbar("Color7G", "color_Trackbar", 0, 255, lambda x:refresh_image())
-cv2.createTrackbar("Color7R", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color7B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
+cv2.createTrackbar("Color7G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
+cv2.createTrackbar("Color7R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
 
 #resizes thw window that has all the colors
 cv2.resizeWindow("color_Trackbar", 300, 500)
+
+#Writes and saves JSON files
 
 #gets the value of a specifc color trackbar on the color_Trackbar window
    
@@ -93,4 +96,14 @@ elif keypressed == ord('s'):
     save_image(file_name, refresh_image(grayscale_image, True))
     save_image(file_name, grayscale_image, '_grayscale')
     save_image(file_name, original_image, '_original')
+    colors = {
+        "Color1": get_color(1),
+        "Color2": get_color(2),
+        "Color3": get_color(3),
+        "Color4": get_color(4),
+        "Color5": get_color(5),
+        "Color6": get_color(6)
+        }
+    with open('colors.json', 'x') as f:
+        json.dump(colors,f)
     cv2.destroyAllWindows()
