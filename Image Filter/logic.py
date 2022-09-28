@@ -31,4 +31,38 @@ def save_image(file_name, image, extra = ''):
     if not ext:
         ext = '.jpeg'
     cv2.imwrite('Output/'+root+ext, image)    
+
+def get_color(id):
+    whindow_name = "color_Trackbar"
+    bar_base_name = "Color"+str(id)
+    blue = bar_base_name+"B"
+    green = bar_base_name+"G"
+    red = bar_base_name+"R"
+    return [cv2.getTrackbarPos(blue, whindow_name), cv2.getTrackbarPos(green, whindow_name), cv2.getTrackbarPos(red, whindow_name)]
+
+
+def refresh_image(grey_image, return_image = False):
+    break_1 = cv2.getTrackbarPos("Color1Break", "Customized Image")
+    break_2 = (break_1/6) * 2
+    break_3 = (break_1/6) * 3
+    break_4 = (break_1/6) * 4
+    break_5 = (break_1/6) * 5
+    break_6 = (break_1/6) * 6
+
+    color_1_parts = create_image_part(grey_image, 0, break_1, get_color(1))
+    color_2_parts = create_image_part(grey_image, break_1+1, break_2, get_color(2))
+    color_3_parts = create_image_part(grey_image, break_2+1, break_3, get_color(3))
+    color_4_parts = create_image_part(grey_image, break_3+1, break_4, get_color(4))
+    color_5_parts = create_image_part(grey_image, break_4+1, break_5, get_color(5))
+    color_6_parts = create_image_part(grey_image,  break_5+1, break_6, get_color(6))
+
+    customized_image = cv2.bitwise_or(color_1_parts, color_2_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_3_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_4_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_5_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_6_parts)
     
+    #shows windows
+    cv2.imshow('Customized Image',customized_image)
+    if (return_image):
+        return customized_image
