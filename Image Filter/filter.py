@@ -44,7 +44,7 @@ cv2.namedWindow("Original Image")
 cv2.namedWindow("Grayscale Image")
 
 #create sliders for grayscale breaks
-cv2.createTrackbar("Color1Break", "Customized Image", 0, 255, lambda x:None)
+cv2.createTrackbar("Color1Break", "Customized Image", 0, 255, lambda x:refresh_image())
 # cv2.createTrackbar("Color2Break", "gray_Trackbar", 0, 255, lambda x:None)
 # cv2.createTrackbar("Color3Break", "gray_Trackbar", 0, 255, lambda x:None)
 # cv2.createTrackbar("Color4Break", "gray_Trackbar", 0, 255, lambda x:None)
@@ -52,34 +52,33 @@ cv2.createTrackbar("Color1Break", "Customized Image", 0, 255, lambda x:None)
 # cv2.createTrackbar("Color6Break", "gray_Trackbar", 0, 255, lambda x:None)
 
 #create sliders for color changes
-cv2.createTrackbar("Color1B", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color1G", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color1R", "color_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color1B", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color1G", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color1R", "color_Trackbar", 0, 255, lambda x:refresh_image())
 
-cv2.createTrackbar("Color2B", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color2G", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color2R", "color_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color2B", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color2G", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color2R", "color_Trackbar", 0, 255, lambda x:refresh_image())
 
-cv2.createTrackbar("Color3B", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color3G", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color3R", "color_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color3B", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color3G", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color3R", "color_Trackbar", 0, 255, lambda x:refresh_image())
 
-cv2.createTrackbar("Color4B", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color4G", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color4R", "color_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color4B", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color4G", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color4R", "color_Trackbar", 0, 255, lambda x:refresh_image())
 
-cv2.createTrackbar("Color5B", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color5G", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color5R", "color_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color5B", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color5G", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color5R", "color_Trackbar", 0, 255, lambda x:refresh_image())
 
-cv2.createTrackbar("Color6B", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color6G", "color_Trackbar", 0, 255, lambda x:None)
-cv2.createTrackbar("Color6R", "color_Trackbar", 0, 255, lambda x:None)
+cv2.createTrackbar("Color6B", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color6G", "color_Trackbar", 0, 255, lambda x:refresh_image())
+cv2.createTrackbar("Color6R", "color_Trackbar", 0, 255, lambda x:refresh_image())
 
-cv2.resizeWindow("color_Trackbar", 500, 500)
+cv2.resizeWindow("color_Trackbar", 100, 500)
 
 
-keypressed = cv2.waitKey(30)
 
 
 def get_color(id):
@@ -90,7 +89,7 @@ def get_color(id):
     red = bar_base_name+"R"
     return [cv2.getTrackbarPos(blue, whindow_name), cv2.getTrackbarPos(green, whindow_name), cv2.getTrackbarPos(red, whindow_name)]
 
-while keypressed != 27 and keypressed != ord('s'):
+# while keypressed != 27 and keypressed != ord('s'):
     #creates images of red and yellow images and a combined image which has red and yellow
     break_1 = cv2.getTrackbarPos("Color1Break", "Customized Image")
     break_2 = (break_1/6) * 2
@@ -118,13 +117,41 @@ while keypressed != 27 and keypressed != ord('s'):
     cv2.imshow('Customized Image',customized_image)
 
     #check for keypress every 30ms
-    keypressed = cv2.waitKey(30)
-    if keypressed == 27:
-        cv2.destroyAllWindows()
-    elif keypressed == ord('s'): 
-        file_name = input('Save Customized Image as:')
-        save_image(file_name, customized_image)
-        save_image(file_name, grayscale_image, '_grayscale')
-        save_image(file_name, original_image, '_original')
-        cv2.destroyAllWindows()
 
+
+def refresh_image():
+    break_1 = cv2.getTrackbarPos("Color1Break", "Customized Image")
+    break_2 = (break_1/6) * 2
+    break_3 = (break_1/6) * 3
+    break_4 = (break_1/6) * 4
+    break_5 = (break_1/6) * 5
+    break_6 = (break_1/6) * 6
+
+    color_1_parts = create_image_part(grayscale_image, 0, break_1, get_color(1))
+    color_2_parts = create_image_part(grayscale_image, break_1+1, break_2, get_color(2))
+    color_3_parts = create_image_part(grayscale_image, break_2+1, break_3, get_color(3))
+    color_4_parts = create_image_part(grayscale_image, break_3+1, break_4, get_color(4))
+    color_5_parts = create_image_part(grayscale_image, break_4+1, break_5, get_color(5))
+    color_6_parts = create_image_part(grayscale_image,  break_5+1, break_6, get_color(5))
+
+    customized_image = cv2.bitwise_or(color_1_parts, color_2_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_3_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_4_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_5_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_6_parts)
+    
+    #shows windows
+    cv2.imshow('Original Image',original_image)
+    cv2.imshow('Grayscale Image',grayscale_image)
+    cv2.imshow('Customized Image',customized_image)
+
+refresh_image()
+keypressed = cv2.waitKey(0)
+if keypressed == 27:
+    cv2.destroyAllWindows()
+elif keypressed == ord('s'): 
+    file_name = input('Save Customized Image as:')
+    save_image(file_name, customized_image)
+    save_image(file_name, grayscale_image, '_grayscale')
+    save_image(file_name, original_image, '_original')
+    cv2.destroyAllWindows()
