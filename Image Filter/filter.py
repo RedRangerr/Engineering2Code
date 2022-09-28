@@ -76,10 +76,19 @@ cv2.createTrackbar("Color6B", "color_Trackbar", 0, 255, lambda x:None)
 cv2.createTrackbar("Color6G", "color_Trackbar", 0, 255, lambda x:None)
 cv2.createTrackbar("Color6R", "color_Trackbar", 0, 255, lambda x:None)
 
-
+cv2.resizeWindow("color_Trackbar", 500, 500)
 
 
 keypressed = cv2.waitKey(30)
+
+
+def get_color(id):
+    whindow_name = "color_Trackbar"
+    bar_base_name = "Color"+str(id)
+    blue = bar_base_name+"B"
+    green = bar_base_name+"G"
+    red = bar_base_name+"R"
+    return [cv2.getTrackbarPos(blue, whindow_name), cv2.getTrackbarPos(green, whindow_name), cv2.getTrackbarPos(red, whindow_name)]
 
 while keypressed != 27 and keypressed != ord('s'):
     #creates images of red and yellow images and a combined image which has red and yellow
@@ -90,18 +99,18 @@ while keypressed != 27 and keypressed != ord('s'):
     break_5 = (break_1/6) * 5
     break_6 = (break_1/6) * 6
 
-    red_parts_of_image = create_image_part(grayscale_image, 0, break_1, [0,0,255])
-    yellow_parts_of_image = create_image_part(grayscale_image, break_1+1, break_2, [0,255,255])
-    green_parts_of_image = create_image_part(grayscale_image, break_2+1, break_3, [0,255,0])
-    blue_parts_of_image = create_image_part(grayscale_image, break_3+1, break_4, [255, 0, 0])
-    purple_parts_of_image = create_image_part(grayscale_image, break_4+1, break_5, [250, 230, 30])
-    gold_parts_of_image = create_image_part(grayscale_image,  break_5+1, break_6, [38,162,193])
+    color_1_parts = create_image_part(grayscale_image, 0, break_1, get_color(1))
+    color_2_parts = create_image_part(grayscale_image, break_1+1, break_2, get_color(2))
+    color_3_parts = create_image_part(grayscale_image, break_2+1, break_3, get_color(3))
+    color_4_parts = create_image_part(grayscale_image, break_3+1, break_4, get_color(4))
+    color_5_parts = create_image_part(grayscale_image, break_4+1, break_5, get_color(5))
+    color_6_parts = create_image_part(grayscale_image,  break_5+1, break_6, get_color(5))
 
-    customized_image = cv2.bitwise_or(red_parts_of_image, yellow_parts_of_image)
-    customized_image = cv2.bitwise_or(customized_image, green_parts_of_image)
-    customized_image = cv2.bitwise_or(customized_image, blue_parts_of_image)
-    customized_image = cv2.bitwise_or(customized_image, purple_parts_of_image)
-    customized_image = cv2.bitwise_or(customized_image, gold_parts_of_image)
+    customized_image = cv2.bitwise_or(color_1_parts, color_2_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_3_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_4_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_5_parts)
+    customized_image = cv2.bitwise_or(customized_image, color_6_parts)
     
     #shows windows
     cv2.imshow('Original Image',original_image)
