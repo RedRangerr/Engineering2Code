@@ -1,13 +1,12 @@
 # Images_01_Starting_Code
 # Engineer Your World
-
 import cv2
 import numpy
 import os
 import os.path
 import json
 from logic import *
-
+from color_state import ColorManager
 """
 Requirements
     [X]Output: Original Image, Grayscale image, and Customized Image.
@@ -46,61 +45,32 @@ if json_option == "Y":
 
 
 #creates windows
-cv2.namedWindow("color_Trackbar")
+cv2.namedWindow("Color_Controls")
 cv2.namedWindow('Customized Image')
-cv2.namedWindow("Original Image")
-cv2.namedWindow("Grayscale Image")
+# cv2.namedWindow("Original Image")
+# cv2.namedWindow("Grayscale Image")
 
-cv2.namedWindow("Color1Part")
-cv2.namedWindow("Color2Part")
-cv2.namedWindow("Color3Part")
-cv2.namedWindow("Color4Part")
-cv2.namedWindow("Color5Part")
-cv2.namedWindow("Color6Part")
+# cv2.namedWindow("Color1Part")
+# cv2.namedWindow("Color2Part")
+# cv2.namedWindow("Color3Part")
+# cv2.namedWindow("Color4Part")
+# cv2.namedWindow("Color5Part")
+# cv2.namedWindow("Color6Part")
 
+colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]}
 
-#create slider for grayscale break
-cv2.createTrackbar("Color1Break", "Customized Image", 0, 255, lambda x:refresh_image(grayscale_image))
-
-#create sliders for color changes
-cv2.createTrackbar("Color1B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color1G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color1R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-
-cv2.createTrackbar("Color2B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color2G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color2R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-
-cv2.createTrackbar("Color3B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color3G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color3R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-
-cv2.createTrackbar("Color4B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color4G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color4R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-
-cv2.createTrackbar("Color5B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color5G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color5R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-
-cv2.createTrackbar("Color6B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color6G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color6R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-
-cv2.createTrackbar("Color7B", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color7G", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
-cv2.createTrackbar("Color7R", "color_Trackbar", 0, 255, lambda x:refresh_image(grayscale_image))
+color_manager = ColorManager("Color_Controls", grayscale_image, colors_start)
 
 #resizes thw window that has all the colors
-cv2.resizeWindow("color_Trackbar", 300, 500)
+cv2.resizeWindow("Color_Controls", 300, 500)
     
-refresh_image(grayscale_image)
+
 keypressed = cv2.waitKey(0)
 if keypressed == 27:
     cv2.destroyAllWindows()
 elif keypressed == ord('s'): 
     file_name = input('Save Customized Image as:')
-    save_image(file_name, refresh_image(grayscale_image, True))
+    save_image(file_name, color_manager.get_image())
     save_image(file_name, grayscale_image, '_grayscale')
     save_image(file_name, original_image, '_original')
     colorPath = input("Save color file as:")
