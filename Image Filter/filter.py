@@ -70,7 +70,7 @@ if keypressed == 27:
     cv2.destroyAllWindows()
 elif keypressed == ord('s'): 
     file_name = input('Save Customized Image as:')
-    save_image(file_name, color_manager.get_image())
+    save_image(file_name, refresh_image(grayscale_image, True))
     save_image(file_name, grayscale_image, '_grayscale')
     save_image(file_name, original_image, '_original')
     colorPath = input("Save color file as:")
