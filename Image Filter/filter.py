@@ -59,7 +59,7 @@ cv2.namedWindow('Customized Image')
 
 colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]}
 
-color_manager = ColorManager("Color_Controls", grayscale_image, colors_start)
+color_manager = ColorManager("Color_Controls", original_image, grayscale_image, colors_start)
 
 #resizes thw window that has all the colors
 cv2.resizeWindow("Color_Controls", 300, 500)
@@ -70,9 +70,9 @@ if keypressed == 27:
     cv2.destroyAllWindows()
 elif keypressed == ord('s'): 
     file_name = input('Save Customized Image as:')
-    save_image(file_name, refresh_image(grayscale_image, True))
-    save_image(file_name, grayscale_image, '_grayscale')
-    save_image(file_name, original_image, '_original')
+    save_image(file_name, color_manager.get_customized_image())
+    save_image(file_name, color_manager.get_greyscale_image(), '_grayscale')
+    save_image(file_name, color_manager.get_original_image(), '_original')
     colorPath = input("Save color file as:")
     colors = {
         "gray_value": cv2.getTrackbarPos("Color1Break", "Customized Image"),

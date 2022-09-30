@@ -2,11 +2,12 @@ import cv2
 import logic
 
 class ColorManager:
-    def __init__(self, window_name, origin_image, original_colors = {}) -> None:
+    def __init__(self, window_name, original_image, grayscale_image, original_colors = {}) -> None:
         self.current_color = 1
         self.colors = original_colors #{[b,g,r]}
         self.window_name = window_name
-        self.origin_image = origin_image
+        self.original_image = original_image
+        self.grayscale_image = grayscale_image
         cv2.createTrackbar("ColorB", window_name, 0, 255, lambda x:self.update_color_trackbars(0, x))
         cv2.createTrackbar("ColorG", window_name, 0, 255, lambda x:self.update_color_trackbars(1, x))
         cv2.createTrackbar("ColorR", window_name, 0, 255, lambda x:self.update_color_trackbars(2, x))
@@ -26,7 +27,7 @@ class ColorManager:
     
     def on_trackbar_update(self):
         print("refreshing image...")
-        logic.refresh_image(self.origin_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors)
+        logic.refresh_image(self.grayscale_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors)
         
     def on_curent_color_trackbar_update(self,x):
         self.set_current_color(x)
@@ -34,9 +35,13 @@ class ColorManager:
     def update_color_trackbars(self, id, val):
         print(self.current_color)
         self.colors[self.current_color][id] = val
-        logic.refresh_image(self.origin_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors)
+        logic.refresh_image(self.grayscale_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors)
 
-    def get_image(self):
-        return logic.refresh_image(self.origin_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors, True)
+    def get_customized_image(self):
+        return logic.refresh_image(self.grayscale_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors, True)
         
-
+    def get_greyscale_image(self):
+        return self.grayscale_image
+    
+    def get_original_image(self):
+        return self.original_image
