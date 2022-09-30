@@ -30,11 +30,19 @@ while filename_valid == False:
     else:
         print ("Something was wrong with that filename. Please try again.")
 
+
 #reads the image provided by the user
 original_image = cv2.imread(filename,1)
 grayscale_image_simple = cv2.imread(filename, 0)
 grayscale_image = cv2.cvtColor(grayscale_image_simple, cv2.COLOR_GRAY2BGR)
 
+json_option = input("Would you like to load colors? (Y/N) ")
+if json_option == "Y":
+    with open(input("Enter the file name:"), 'r') as input_file:
+        pass
+        
+        
+    
 
 
 #creates windows
@@ -101,6 +109,7 @@ elif keypressed == ord('s'):
     save_image(file_name, refresh_image(grayscale_image, True))
     save_image(file_name, grayscale_image, '_grayscale')
     save_image(file_name, original_image, '_original')
+    colorPath = input("Save color file as:")
     colors = {
         "gray_value": cv2.getTrackbarPos("Color1Break", "Customized Image"),
         "Color1": get_color(1),
@@ -110,6 +119,6 @@ elif keypressed == ord('s'):
         "Color5": get_color(5),
         "Color6": get_color(6)
         }
-    with open('colors.json', 'x') as f:
+    with open(colorPath, 'x') as f:
         json.dump(colors,f)
     cv2.destroyAllWindows()
