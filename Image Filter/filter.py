@@ -74,6 +74,7 @@ elif keypressed == ord('s'):
     save_image(file_name, color_manager.get_greyscale_image(), '_grayscale')
     save_image(file_name, color_manager.get_original_image(), '_original')
     colorPath = input("Save color file as:")
+    #todo: fix saving json values with new class functions
     colors = {
         "gray_value": cv2.getTrackbarPos("Color1Break", "Customized Image"),
         "Color1": get_color(1),
