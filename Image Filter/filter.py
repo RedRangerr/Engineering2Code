@@ -85,12 +85,6 @@ cv2.createTrackbar("Color7R", "color_Trackbar", 0, 255, lambda x:refresh_image(g
 
 #resizes thw window that has all the colors
 cv2.resizeWindow("color_Trackbar", 300, 500)
-
-colors = {}
-
-def update_color(newVal, trackbar):
-    global colors
-    colors[trackbar] = newVal
     
 refresh_image(grayscale_image)
 keypressed = cv2.waitKey(0)
