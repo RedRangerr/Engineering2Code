@@ -19,9 +19,6 @@ Requirements
     [X]Add comments
     
 """
-
-
-
 #gets the image from the user
 print ("Save your original image in the same folder as this program.")
 filename_valid = False
@@ -38,11 +35,21 @@ original_image = cv2.imread(filename,1)
 grayscale_image_simple = cv2.imread(filename, 0)
 grayscale_image = cv2.cvtColor(grayscale_image_simple, cv2.COLOR_GRAY2BGR)
 
+
+
 #creates windows
 cv2.namedWindow("color_Trackbar")
 cv2.namedWindow('Customized Image')
 cv2.namedWindow("Original Image")
 cv2.namedWindow("Grayscale Image")
+
+cv2.namedWindow("Color1Part")
+cv2.namedWindow("Color2Part")
+cv2.namedWindow("Color3Part")
+cv2.namedWindow("Color4Part")
+cv2.namedWindow("Color5Part")
+cv2.namedWindow("Color6Part")
+
 
 #create slider for grayscale break
 cv2.createTrackbar("Color1Break", "Customized Image", 0, 255, lambda x:refresh_image(grayscale_image))
@@ -79,14 +86,12 @@ cv2.createTrackbar("Color7R", "color_Trackbar", 0, 255, lambda x:refresh_image(g
 #resizes thw window that has all the colors
 cv2.resizeWindow("color_Trackbar", 300, 500)
 
-#Writes and saves JSON files
+colors = {}
 
-#gets the value of a specifc color trackbar on the color_Trackbar window
-   
-
-#refreshes the customized image based on the slider value
-
-
+def update_color(newVal, trackbar):
+    global colors
+    colors[trackbar] = newVal
+    
 refresh_image(grayscale_image)
 keypressed = cv2.waitKey(0)
 if keypressed == 27:

@@ -42,12 +42,12 @@ def get_color(id):
 
 
 def refresh_image(grey_image, return_image = False):
-    break_1 = cv2.getTrackbarPos("Color1Break", "Customized Image")
-    break_2 = (break_1/6) * 2
-    break_3 = (break_1/6) * 3
-    break_4 = (break_1/6) * 4
-    break_5 = (break_1/6) * 5
-    break_6 = (break_1/6) * 6
+    break_1 = float(cv2.getTrackbarPos("Color1Break", "Customized Image"))/6
+    break_2 = float(break_1) * 2
+    break_3 = float(break_1) * 3
+    break_4 = float(break_1) * 4
+    break_5 = float(break_1) * 5
+    break_6 = float(break_1) * 6
 
     color_1_parts = create_image_part(grey_image, 0, break_1, get_color(1))
     color_2_parts = create_image_part(grey_image, break_1+1, break_2, get_color(2))
@@ -63,6 +63,12 @@ def refresh_image(grey_image, return_image = False):
     customized_image = cv2.bitwise_or(customized_image, color_6_parts)
     
     #shows windows
+    cv2.imshow('Color1Part', color_1_parts)
+    cv2.imshow('Color2Part', color_2_parts)
+    cv2.imshow('Color3Part', color_3_parts)
+    cv2.imshow('Color4Part', color_4_parts)
+    cv2.imshow('Color5Part', color_5_parts)
+    cv2.imshow('Color6Part', color_6_parts)
     cv2.imshow('Customized Image',customized_image)
     if (return_image):
         return customized_image
