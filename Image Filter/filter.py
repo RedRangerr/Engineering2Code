@@ -97,7 +97,7 @@ elif keypressed == ord('s'):
     save_image(file_name, grayscale_image, '_grayscale')
     save_image(file_name, original_image, '_original')
     colors = {
-        "gray_value": cv2.getTrackbarPos("Color1Break", "Customized Image")
+        "gray_value": cv2.getTrackbarPos("Color1Break", "Customized Image"),
         "Color1": get_color(1),
         "Color2": get_color(2),
         "Color3": get_color(3),
