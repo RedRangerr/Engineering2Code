@@ -15,7 +15,7 @@ Requirements
     [X]Make Save option
     []Bonus: Save/Import Color combos   
     []Bonus: More than Six colors
-    [X]Add comments
+    []Add comments
     
 """
 #gets the image from the user
