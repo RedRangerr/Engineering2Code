@@ -1,3 +1,4 @@
+from re import I
 import cv2
 import logic
 
@@ -45,3 +46,9 @@ class ColorManager:
     
     def get_original_image(self):
         return self.original_image
+    
+    def get_graybreak_value(self):
+        return cv2.getTrackbarPos("ColorBreak", self.window_name)
+    
+    def get_color_value(self, id):
+        return self.colors[id]

@@ -59,11 +59,7 @@ cv2.namedWindow('Customized Image')
 
 colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]}
 
-color_manager = ColorManager("Color_Controls", original_image, grayscale_image, colors_start)
-
-#resizes thw window that has all the colors
-cv2.resizeWindow("Color_Controls", 300, 500)
-    
+color_manager = ColorManager("Color_Controls", original_image, grayscale_image, colors_start)    
 
 keypressed = cv2.waitKey(0)
 if keypressed == 27:
@@ -76,13 +72,13 @@ elif keypressed == ord('s'):
     colorPath = input("Save color file as:")
     #todo: fix saving json values with new class functions
     colors = {
-        "gray_value": cv2.getTrackbarPos("Color1Break", "Customized Image"),
-        "Color1": get_color(1),
-        "Color2": get_color(2),
-        "Color3": get_color(3),
-        "Color4": get_color(4),
-        "Color5": get_color(5),
-        "Color6": get_color(6)
+        "gray_value": color_manager.get_graybreak_value(),
+        "Color1": color_manager.get_color_value(1),
+        "Color2": color_manager.get_color_value(2),
+        "Color3": color_manager.get_color_value(3),
+        "Color4": color_manager.get_color_value(4),
+        "Color5": color_manager.get_color_value(5),
+        "Color6": color_manager.get_color_value(6)
         }
     with open(colorPath, 'x') as f:
         json.dump(colors,f)
