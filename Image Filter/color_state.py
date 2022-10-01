@@ -32,7 +32,6 @@ class ColorManager:
         self.set_current_color(x)
     
     def update_color_trackbars(self, id, val):
-        print(self.current_color)
         self.colors[self.current_color][id] = val
         logic.refresh_image(self.grayscale_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors)
 

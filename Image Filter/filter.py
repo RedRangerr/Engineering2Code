@@ -61,7 +61,7 @@ colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]
 
 color_manager = ColorManager("Color_Controls", original_image, grayscale_image, colors_start)    
 
-keypressed = cv2.waitKey(0)
+keypressed = cv2.waitKey(30)
 
 while keypressed != 27 and keypressed != ord('s'):
     keypressed = cv2.waitKey(30)
