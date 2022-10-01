@@ -32,16 +32,6 @@ def save_image(file_name, image, extra = ''):
         ext = '.jpeg'
     cv2.imwrite('Output/'+root+ext, image)    
 
-def get_color(id):
-    whindow_name = "color_Trackbar"
-    bar_base_name = "Color"+str(id)
-    blue = bar_base_name+"B"
-    green = bar_base_name+"G"
-    red = bar_base_name+"R"
-    return [cv2.getTrackbarPos(blue, whindow_name), cv2.getTrackbarPos(green, whindow_name), cv2.getTrackbarPos(red, whindow_name)]
-
-
-
 def refresh_image(grey_image, grey_break, colors, return_image = False):
     break_1 = float(grey_break)/6
     break_2 = float(break_1) * 2
@@ -63,13 +53,6 @@ def refresh_image(grey_image, grey_break, colors, return_image = False):
     customized_image = cv2.bitwise_or(customized_image, color_5_parts)
     customized_image = cv2.bitwise_or(customized_image, color_6_parts)
     
-    #shows windows
-    # cv2.imshow('Color1Part', color_1_parts)
-    # cv2.imshow('Color2Part', color_2_parts)
-    # cv2.imshow('Color3Part', color_3_parts)
-    # cv2.imshow('Color4Part', color_4_parts)
-    # cv2.imshow('Color5Part', color_5_parts)
-    # cv2.imshow('Color6Part', color_6_parts)
     cv2.imshow('Customized Image',customized_image)
     if (return_image):
         return customized_image
