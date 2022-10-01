@@ -13,7 +13,7 @@ class ColorManager:
         cv2.createTrackbar("ColorG", window_name, 0, 255, lambda x:self.update_color_trackbars(1, x))
         cv2.createTrackbar("ColorR", window_name, 0, 255, lambda x:self.update_color_trackbars(2, x))
         cv2.createTrackbar("ColorBreak", window_name, 0, 255, lambda x:self.on_trackbar_update())
-        cv2.createTrackbar("CurrentColor", window_name, 1, 6, lambda x:self.on_curent_color_trackbar_update(x))
+        cv2.createTrackbar("CurrentColor", window_name, 1, 10, lambda x:self.on_curent_color_trackbar_update(x))
         if greybreak_val != 0:
             cv2.setTrackbarPos("ColorBreak", window_name, greybreak_val)
         self.set_current_color(1)

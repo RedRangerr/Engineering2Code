@@ -73,7 +73,7 @@ if json_file != None:
     colors_start = data[1]
     print(colors_start)
 else:
-    colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]}
+    colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0], 7:[0,0,0], 8:[0,0,0], 9:[0,0,0], 10:[0,0,0]}
 
 color_manager = ColorManager("Color_Controls", original_image, grayscale_image, greybreak_start, colors_start)    
 
