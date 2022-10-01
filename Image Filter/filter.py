@@ -13,7 +13,7 @@ Requirements
     [X]Change colors
     []Make Instructions
     [X]Make Save option
-    []Bonus: Save/Import Color combos   
+    [X]Bonus: Save/Import Color combos   
     []Bonus: More than Six colors
     []Add comments
     
