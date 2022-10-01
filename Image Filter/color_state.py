@@ -49,3 +49,10 @@ class ColorManager:
     
     def get_color_value(self, id):
         return self.colors[id]
+    
+    def get_state(self):
+        dict = {}
+        dict['gray_value'] = cv2.getTrackbarPos("ColorBreak", self.window_name)
+        for key in self.colors:
+            dict['Color'+str(key)] = self.colors[key]
+        return dict
