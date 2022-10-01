@@ -62,6 +62,7 @@ colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]
 color_manager = ColorManager("Color_Controls", original_image, grayscale_image, colors_start)    
 
 keypressed = cv2.waitKey(0)
+
 if keypressed == 27:
     cv2.destroyAllWindows()
 elif keypressed == ord('s'): 
@@ -70,7 +71,6 @@ elif keypressed == ord('s'):
     save_image(file_name, color_manager.get_greyscale_image(), '_grayscale')
     save_image(file_name, color_manager.get_original_image(), '_original')
     colorPath = input("Save color file as:")
-    #todo: fix saving json values with new class functions
     colors = {
         "gray_value": color_manager.get_graybreak_value(),
         "Color1": color_manager.get_color_value(1),
@@ -79,7 +79,8 @@ elif keypressed == ord('s'):
         "Color4": color_manager.get_color_value(4),
         "Color5": color_manager.get_color_value(5),
         "Color6": color_manager.get_color_value(6)
-        }
-    with open(colorPath, 'x') as f:
+    }
+    root, ext = os.path.splitext(colorPath)
+    with open(root+".json", 'w') as f:
         json.dump(colors,f)
     cv2.destroyAllWindows()
