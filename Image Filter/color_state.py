@@ -5,7 +5,7 @@ import logic
 class ColorManager:
     def __init__(self, window_name, original_image, grayscale_image, original_colors = {}) -> None:
         self.current_color = 1
-        self.colors = original_colors #{[b,g,r]}
+        self.colors = original_colors
         self.window_name = window_name
         self.original_image = original_image
         self.grayscale_image = grayscale_image
@@ -20,14 +20,12 @@ class ColorManager:
     def set_current_color(self, color_new):
         if (color_new < 1):
             return
-        print("Color id being updated.")
         self.current_color = color_new
         cv2.setTrackbarPos("ColorB", self.window_name, self.colors[color_new][0])
         cv2.setTrackbarPos("ColorG", self.window_name, self.colors[color_new][1])
         cv2.setTrackbarPos("ColorR", self.window_name, self.colors[color_new][2])
     
     def on_trackbar_update(self):
-        print("refreshing image...")
         logic.refresh_image(self.grayscale_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors)
         
     def on_curent_color_trackbar_update(self,x):
