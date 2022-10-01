@@ -3,7 +3,7 @@ import cv2
 import logic
 
 class ColorManager:
-    def __init__(self, window_name, original_image, grayscale_image, original_colors = {}) -> None:
+    def __init__(self, window_name, original_image, grayscale_image, greybreak_val = 0, original_colors = {}) -> None:
         self.current_color = 1
         self.colors = original_colors
         self.window_name = window_name
@@ -14,6 +14,8 @@ class ColorManager:
         cv2.createTrackbar("ColorR", window_name, 0, 255, lambda x:self.update_color_trackbars(2, x))
         cv2.createTrackbar("ColorBreak", window_name, 0, 255, lambda x:self.on_trackbar_update())
         cv2.createTrackbar("CurrentColor", window_name, 1, 6, lambda x:self.on_curent_color_trackbar_update(x))
+        if greybreak_val != 0:
+            cv2.setTrackbarPos("ColorBreak", window_name, greybreak_val)
         self.set_current_color(1)
         self.on_trackbar_update()
 
@@ -54,5 +56,5 @@ class ColorManager:
         dict = {}
         dict['gray_value'] = cv2.getTrackbarPos("ColorBreak", self.window_name)
         for key in self.colors:
-            dict['Color'+str(key)] = self.colors[key]
+            dict[key] = self.colors[key]
         return dict

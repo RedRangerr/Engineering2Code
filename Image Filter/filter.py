@@ -36,30 +36,46 @@ grayscale_image_simple = cv2.imread(filename, 0)
 grayscale_image = cv2.cvtColor(grayscale_image_simple, cv2.COLOR_GRAY2BGR)
 
 json_option = input("Would you like to load colors? (Y/N) ")
-if json_option == "Y":
-    with open(input("Enter the file name:"), 'r') as input_file:
-        pass
-        
-        
-    
-
+json_file = None
+if json_option == "Y" or json_option == "y":
+    while True:
+        file_name = input("Enter the file name:")
+        if not os.path.isfile(file_name):
+            try_again_str = input("Couldn't find the file path specified. Do you want to try again?(y/n)")
+            if not try_again_str == "y":
+                break
+            else:
+                continue
+        else:
+            with open(file_name, 'r') as f:
+                json_file = json.load(f)
+                cv2.destroyAllWindows()
+            print("Loaded color combinations!")
+            break
+            
+def try_deserialize_json(dict):
+    gray_value = dict['gray_value']
+    colors = {}
+    for i in range(1, len(dict)):
+        colors[i] = dict[str(i)]
+    return (gray_value, colors) 
 
 #creates windows
 cv2.namedWindow("Color_Controls")
 cv2.namedWindow('Customized Image')
-# cv2.namedWindow("Original Image")
-# cv2.namedWindow("Grayscale Image")
 
-# cv2.namedWindow("Color1Part")
-# cv2.namedWindow("Color2Part")
-# cv2.namedWindow("Color3Part")
-# cv2.namedWindow("Color4Part")
-# cv2.namedWindow("Color5Part")
-# cv2.namedWindow("Color6Part")
+greybreak_start = 0
+colors_start = None
 
-colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]}
+if json_file != None:
+    data = try_deserialize_json(json_file)
+    greybreak_start = data[0]
+    colors_start = data[1]
+    print(colors_start)
+else:
+    colors_start = {1:[0,0,0], 2:[0,0,0], 3:[0,0,0], 4:[0,0,0], 5:[0,0,0], 6:[0,0,0]}
 
-color_manager = ColorManager("Color_Controls", original_image, grayscale_image, colors_start)    
+color_manager = ColorManager("Color_Controls", original_image, grayscale_image, greybreak_start, colors_start)    
 
 keypressed = cv2.waitKey(30)
 
