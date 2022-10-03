@@ -77,24 +77,32 @@ else:
 
 color_manager = ColorManager("Color_Controls", original_image, grayscale_image, greybreak_start, colors_start)    
 
-keypressed = cv2.waitKey(30)
 
 save_stuff = False
 
+customized_image = None
+original_image = None
+grayscale_image = None
+colors = None
+keypressed = cv2.waitKey(30)
 while keypressed != 27 and keypressed != ord('s'):
     keypressed = cv2.waitKey(30)
     if keypressed == 27:
         cv2.destroyAllWindows()
     elif keypressed == ord('s'): 
         save_stuff = True
+        customized_image = color_manager.get_customized_image()
+        original_image = color_manager.get_original_image()
+        grayscale_image = color_manager.get_greyscale_image()
+        colors = color_manager.get_state()
+        cv2.destroyAllWindows()
 
 if save_stuff:
     file_name = input('Save Customized Image as:')
-    save_image(file_name, color_manager.get_customized_image())
-    save_image(file_name, color_manager.get_greyscale_image(), '_grayscale')
-    save_image(file_name, color_manager.get_original_image(), '_original')
+    save_image(file_name, customized_image)
+    save_image(file_name, grayscale_image, '_grayscale')
+    save_image(file_name, original_image, '_original')
     colorPath = input("Save color file as:")
-    colors = color_manager.get_state()
     root, ext = os.path.splitext(colorPath)
     with open(root+".json", 'w') as f:
         json.dump(colors,f)
