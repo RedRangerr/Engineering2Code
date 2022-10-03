@@ -55,7 +55,7 @@ def refresh_image(grey_image, grey_break, colors, return_image = False):
     color_7_parts = create_image_part(grey_image,  break_6+1, break_7, colors[7])
     color_8_parts = create_image_part(grey_image,  break_7+1, break_8, colors[8])
     color_9_parts = create_image_part(grey_image,  break_8+1, break_9, colors[9])
-    color_10_parts = create_image_part(grey_image,  break_9+1, break_10, colors[10])
+    color_10_parts = create_image_part(grey_image,  break_9+1, 255, colors[10])
 
 
     customized_image = cv2.bitwise_or(color_1_parts, color_2_parts)
