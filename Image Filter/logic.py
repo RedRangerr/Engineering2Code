@@ -11,7 +11,6 @@ def create_grayscale_arr(min_gray, max_gray):
     return [np.array(min_grayscale, dtype = "uint8"), np.array(max_grayscale, dtype = "uint8")]
 
 #returns a image that has only one color and black based on filtering grayscale values
-#in:grayscale_image: 
 def create_image_part(grayscale_image, min_grayscale, max_grayscale, color):
     min_grayscale_arr,max_grayscale_arr = create_grayscale_arr(min_grayscale, max_grayscale)
     block_all_but_certain_color = cv2.inRange(grayscale_image,min_grayscale_arr, max_grayscale_arr)
@@ -22,7 +21,7 @@ def create_image_part(grayscale_image, min_grayscale, max_grayscale, color):
     paper[0:image_height,0:image_width, 0:image_channels] = color
     return cv2.bitwise_or(paper, paper, mask= block_all_but_certain_color)    
 
-#save an image safely
+#save an image with a certain file name with the option to add an extra string to the name
 def save_image(file_name, image, extra = ''):
     if not os.path.isdir('Output'):
         os.makedirs('Output')
@@ -32,6 +31,7 @@ def save_image(file_name, image, extra = ''):
         ext = '.jpeg'
     cv2.imwrite('Output/'+root+ext, image)    
 
+#refreshes the image based on a greybreak value and color values with the option to return the image
 def refresh_image(grey_image, grey_break, colors, return_image = False):
     break_1 = float(grey_break)/10
     break_2 = float(break_1) * 2
@@ -45,7 +45,7 @@ def refresh_image(grey_image, grey_break, colors, return_image = False):
     break_10 = float(break_1) * 10
 
     
-    
+
     color_1_parts = create_image_part(grey_image, 0, break_1, colors[1])
     color_2_parts = create_image_part(grey_image, break_1+1, break_2, colors[2])
     color_3_parts = create_image_part(grey_image, break_2+1, break_3, colors[3])
