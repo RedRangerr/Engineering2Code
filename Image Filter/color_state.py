@@ -55,19 +55,25 @@ class ColorManager:
     #refreshes and returns the final image
     def get_customized_image(self):
         return logic.refresh_image(self.grayscale_image, cv2.getTrackbarPos("ColorBreak", self.window_name), self.colors, True)
-        
+    
+    #returns the greyscale image
     def get_greyscale_image(self):
         return self.grayscale_image
     
+    #returns the original image
     def get_original_image(self):
         return self.original_image
     
+    #returns the current value of the greybreak
     def get_graybreak_value(self):
         return cv2.getTrackbarPos("ColorBreak", self.window_name)
     
+    #returns the value of a specfic color(max val of 10 since there are only 10 different colors)
     def get_color_value(self, id):
         return self.colors[id]
     
+    #returns a dictionary with the color ids mapping to color values and a string mapping to the current greybreak
+    #this is used to serialize all the data into json
     def get_state(self):
         dict = {}
         dict['gray_value'] = cv2.getTrackbarPos("ColorBreak", self.window_name)
