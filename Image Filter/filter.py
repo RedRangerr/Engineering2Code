@@ -70,6 +70,11 @@ def try_deserialize_json(dict):
 #creates windows
 cv2.namedWindow("Color_Controls")
 cv2.namedWindow('Customized Image')
+cv2.namedWindow('Greyscale Image')
+cv2.namedWindow('Original Image')
+#show greyscale and original image on seperate windows
+cv2.imshow('Greyscale Image', grayscale_image)
+cv2.imshow('Original Image', original_image)
 
 #defines variables for the starting grayscale value and color dictionary
 greybreak_start = 0
