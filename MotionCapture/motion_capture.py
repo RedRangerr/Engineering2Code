@@ -11,21 +11,47 @@ def mouseClick(event, x, y, flags, params):
         #print("The mouse was clicked at x= ", x, "y = ", y)
         print("Hue = ", hsv[0], "Sat = ", hsv[1], "Value = ", hsv[2])
 
+def centroid_finder(input_image, output_image):
+    moments = cv2.moments(input_image)
+
+    if moments['m00'] == 0:
+        centroid_x = 1
+        centroid_y = 1
+    else:
+        centroid_x = moments["m10"]/moments["m00"]
+        centroid_y = moments["m01"]/moments["m00"]
+    
+    cv2.circle(output_image, (int(centroid_x),int(centroid_y)), 5, (255,255,255), -1)
+    return [int(centroid_x), int(centroid_y)]
+
 cap = cv2.VideoCapture(0) #0 is webcam number
-#104,104,185
-blue_upper = [107, 255, 200]
-blue_lower = [99, 117, 50]
+#color 1(green)
+c1_upper = np.array([73, 150, 120], dtype='uint8')
+c1_lower = np.array([62, 70, 100], dtype='uint8')
+#color 2(teal)
+c2_upper = np.array([106, 255, 150], dtype='uint8')
+c2_lower = np.array([96, 120, 30], dtype='uint8')
+#color 3(yellow)
+c3_upper = np.array([23, 150, 255], dtype='uint8')
+c3_lower = np.array([17, 100, 100], dtype='uint8')
+#color 4
+c4_upper = np.array([173, 100, 150 ], dtype='uint8')
+c4_lower = np.array([161, 40, 80 ], dtype='uint8')
 
+"""
+c1_upper = np.array([99, 217, 255], dtype='uint8')
+c1_lower = np.array([90, 60, 60], dtype='uint8')
+#color 2(plymouth plumb)
+c2_upper = np.array([179, 140, 255], dtype='uint8')
+c2_lower = np.array([173, 55, 70], dtype='uint8')
+#color 3(dutch tulip)
+c3_upper = np.array([28, 150, 255], dtype='uint8')
+c3_lower = np.array([22, 40, 160], dtype='uint8')
+#color 4(green)
+c4_upper = np.array([62, 150, 175], dtype='uint8')
+c4_lower = np.array([30, 45, 45], dtype='uint8')
+"""
 
-#blue azores
-blue_upper = np.array(blue_upper, dtype='uint8')
-blue_lower = np.array(blue_lower, dtype='uint8')
-#diva glam
-pink_upper = np.array([177, 200, 180 ], dtype='uint8')
-pink_lower = np.array([167, 100, 120], dtype='uint8')
-#Violet Obsession
-purple_upper = np.array([137, 100, 130 ], dtype='uint8')
-purple_lower = np.array([124, 25, 80 ], dtype='uint8')
 
 cv2.namedWindow("Webcam")
 cv2.namedWindow("Filter")
@@ -37,28 +63,42 @@ while True:
     #convert image to hsv
     frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    #create blue mask
-    blue_mask = cv2.inRange(frame_hsv,blue_lower, blue_upper)
-    blue_mask = cv2.erode(blue_mask, kernel, iterations=1)
-    blue_filter = cv2.bitwise_or(frame, frame, mask = blue_mask)
+    #create 1st mask
+    c1_mask = cv2.inRange(frame_hsv,c1_lower, c1_upper)
+    c1_mask = cv2.erode(c1_mask, kernel, iterations=1)
+    c1_filter = cv2.bitwise_or(frame, frame, mask = c1_mask)
 
-    #create pink mask
-    pink_mask = cv2.inRange(frame_hsv, pink_lower, pink_upper)
-    pink_mask = cv2.erode(pink_mask, kernel, iterations=1)
-    pink_filter = cv2.bitwise_or(frame, frame, mask=pink_mask)
+    #create 2nd mask
+    c2_mask = cv2.inRange(frame_hsv, c2_lower, c2_upper)
+    c2_mask = cv2.erode(c2_mask, kernel, iterations=1)
+    c2_filter = cv2.bitwise_or(frame, frame, mask=c2_mask)
 
-    #create purple filter
-    purple_mask = cv2.inRange(frame_hsv, purple_lower, purple_upper)
-    purple_mask = cv2.erode(purple_mask, kernel, iterations=1)
-    purple_filter = cv2.bitwise_or(frame, frame, mask=purple_mask)
+    #create 3rd filter
+    c3_mask = cv2.inRange(frame_hsv, c3_lower, c3_upper)
+    c3_mask = cv2.erode(c3_mask, kernel, iterations=1)
+    c3_filter = cv2.bitwise_or(frame, frame, mask=c3_mask)
+
+    #create 4th filter
+    c4_mask = cv2.inRange(frame_hsv, c4_lower, c4_upper)
+    c4_mask = cv2.erode(c4_mask, kernel, iterations=1)
+    c4_filter = cv2.bitwise_or(frame, frame, mask=c4_mask)
 
     #create filtered image
-    filtered_image = cv2.bitwise_or(blue_filter, pink_filter)
-    filtered_image = cv2.bitwise_or(filtered_image, purple_filter)
+    filtered_image = cv2.bitwise_or(c1_filter, c2_filter)
+    filtered_image = cv2.bitwise_or(filtered_image, c3_filter)
+    filtered_image = cv2.bitwise_or(filtered_image, c4_filter)
+    #centroid calculation
+    c1_centroid = centroid_finder(c1_mask, filtered_image)
+    c2_centroid = centroid_finder(c2_mask, filtered_image)
+    c3_centroid = centroid_finder(c3_mask, filtered_image)
+    c4_centroid = centroid_finder(c4_mask, filtered_image)
+    #line drawing
+    cv2.line(frame, c1_centroid, c2_centroid, [255,0,0], 3)
+    cv2.line(frame, c2_centroid, c3_centroid, [255,0,0], 3)
+    cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
 
     cv2.imshow("Webcam", frame)
     cv2.imshow("Filter", filtered_image)
-
     if cv2.waitKey(1) == ord('q'):
         break
 
