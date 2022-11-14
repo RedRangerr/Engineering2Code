@@ -3,7 +3,8 @@
 #Siddhu Mohan 2022
 
 import cv2, numpy as np
-
+import math
+from math_helpers import angle
 #Function for mouse clicks
 def mouseClick(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -24,19 +25,24 @@ def centroid_finder(input_image, output_image):
     cv2.circle(output_image, (int(centroid_x),int(centroid_y)), 5, (255,255,255), -1)
     return [int(centroid_x), int(centroid_y)]
 
+def angle_finder(x1, x2, x3):
+    diff = x3*x3 - x2*x2 - x1*x1
+    diff = diff / (-2*(x2*x3))
+    return math.acos(diff) * math.degrees
+
 cap = cv2.VideoCapture(0) #0 is webcam number
 #color 1(green)
-c1_upper = np.array([73, 150, 120], dtype='uint8')
-c1_lower = np.array([62, 70, 100], dtype='uint8')
+c1_upper = np.array([73, 150, 200], dtype='uint8')
+c1_lower = np.array([60, 30, 100], dtype='uint8')
 #color 2(teal)
 c2_upper = np.array([106, 255, 150], dtype='uint8')
 c2_lower = np.array([96, 120, 30], dtype='uint8')
 #color 3(yellow)
-c3_upper = np.array([23, 150, 255], dtype='uint8')
-c3_lower = np.array([17, 100, 100], dtype='uint8')
-#color 4
-c4_upper = np.array([173, 100, 150 ], dtype='uint8')
-c4_lower = np.array([161, 40, 80 ], dtype='uint8')
+c3_upper = np.array([24, 150, 255], dtype='uint8')
+c3_lower = np.array([20, 70, 100], dtype='uint8')
+#color 4(pink)
+c4_upper = np.array([176, 100, 200 ], dtype='uint8')
+c4_lower = np.array([167, 40, 80 ], dtype='uint8')
 
 """
 c1_upper = np.array([99, 217, 255], dtype='uint8')
@@ -92,11 +98,11 @@ while True:
     c2_centroid = centroid_finder(c2_mask, filtered_image)
     c3_centroid = centroid_finder(c3_mask, filtered_image)
     c4_centroid = centroid_finder(c4_mask, filtered_image)
+    print(angle(c1_centroid, c2_centroid, c3_centroid, c4_centroid))
     #line drawing
     cv2.line(frame, c1_centroid, c2_centroid, [255,0,0], 3)
     cv2.line(frame, c2_centroid, c3_centroid, [255,0,0], 3)
     cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
-
     cv2.imshow("Webcam", frame)
     cv2.imshow("Filter", filtered_image)
     if cv2.waitKey(1) == ord('q'):
