@@ -107,14 +107,14 @@ while True:
     
     #line drawing
     cv2.line(frame, c1_centroid, c2_centroid, [255,0,0], 3)
-    cv2.line(frame, c2_centroid, c4_centroid, [255,0,0], 3)
+    cv2.line(frame, c2_centroid, c3_centroid, [255,0,0], 3)
     #cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
     
     #debug
     #cv2.circle(frame, (int(c2_centroid[0]), int(c3_centroid[1])), 5, [0,255,0], -1)
     #cv2.circle(frame, (int(c2_centroid[0]), int(c4_centroid[1])), 5, [0,0,255], -1)
     
-    print(math_helpers.angle_finder(c1_centroid, c2_centroid, c4_centroid))
+    print(math_helpers.angle_finder(c1_centroid, c2_centroid, c3_centroid))
     
     cv2.imshow("Webcam", frame)
     cv2.imshow("Filter", filtered_image)
