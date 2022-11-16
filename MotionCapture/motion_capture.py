@@ -3,8 +3,7 @@
 #Siddhu Mohan 2022
 
 import cv2, numpy as np
-import math
-from math_helpers import angle
+import math_helpers
 #Function for mouse clicks
 def mouseClick(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -25,11 +24,6 @@ def centroid_finder(input_image, output_image):
     cv2.circle(output_image, (int(centroid_x),int(centroid_y)), 5, (255,255,255), -1)
     return [int(centroid_x), int(centroid_y)]
 
-def angle_finder(x1, x2, x3):
-    diff = x3*x3 - x2*x2 - x1*x1
-    diff = diff / (-2*(x2*x3))
-    return math.acos(diff) * math.degrees
-
 cap = cv2.VideoCapture(0) #0 is webcam number
 #color 1(green)
 c1_upper = np.array([73, 150, 200], dtype='uint8')
@@ -44,6 +38,18 @@ c3_lower = np.array([20, 70, 100], dtype='uint8')
 c4_upper = np.array([176, 100, 200 ], dtype='uint8')
 c4_lower = np.array([167, 40, 80 ], dtype='uint8')
 
+#My colors
+c1_upper = np.array([74, 180, 150], dtype='uint8')
+c1_lower = np.array([60, 70, 70], dtype='uint8')
+
+c2_upper = np.array([106, 255, 160], dtype='uint8')
+c2_lower = np.array([95, 100, 100], dtype='uint8')
+
+c4_upper = np.array([176, 100, 255 ], dtype='uint8')
+c4_lower = np.array([167, 40, 100 ], dtype='uint8')
+
+c3_upper = np.array([33, 150, 255], dtype='uint8')
+c3_lower = np.array([30, 0, 100], dtype='uint8')
 """
 c1_upper = np.array([99, 217, 255], dtype='uint8')
 c1_lower = np.array([90, 60, 60], dtype='uint8')
@@ -98,11 +104,18 @@ while True:
     c2_centroid = centroid_finder(c2_mask, filtered_image)
     c3_centroid = centroid_finder(c3_mask, filtered_image)
     c4_centroid = centroid_finder(c4_mask, filtered_image)
-    print(angle(c1_centroid, c2_centroid, c3_centroid, c4_centroid))
+    
     #line drawing
     cv2.line(frame, c1_centroid, c2_centroid, [255,0,0], 3)
-    cv2.line(frame, c2_centroid, c3_centroid, [255,0,0], 3)
-    cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
+    cv2.line(frame, c2_centroid, c4_centroid, [255,0,0], 3)
+    #cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
+    
+    #debug
+    #cv2.circle(frame, (int(c2_centroid[0]), int(c3_centroid[1])), 5, [0,255,0], -1)
+    #cv2.circle(frame, (int(c2_centroid[0]), int(c4_centroid[1])), 5, [0,0,255], -1)
+    
+    print(math_helpers.angle_finder(c1_centroid, c2_centroid, c4_centroid))
+    
     cv2.imshow("Webcam", frame)
     cv2.imshow("Filter", filtered_image)
     if cv2.waitKey(1) == ord('q'):
