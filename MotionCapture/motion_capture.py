@@ -30,7 +30,7 @@ c1_upper = np.array([73, 150, 200], dtype='uint8')
 c1_lower = np.array([60, 30, 100], dtype='uint8')
 #color 2(teal)
 c2_upper = np.array([106, 255, 150], dtype='uint8')
-c2_lower = np.array([96, 120, 30], dtype='uint8')
+c2_lower = np.array([93, 120, 30], dtype='uint8')
 #color 3(yellow)
 c3_upper = np.array([24, 150, 255], dtype='uint8')
 c3_lower = np.array([20, 70, 100], dtype='uint8')
@@ -39,17 +39,17 @@ c4_upper = np.array([176, 100, 200 ], dtype='uint8')
 c4_lower = np.array([167, 40, 80 ], dtype='uint8')
 
 #My colors
-c1_upper = np.array([74, 180, 150], dtype='uint8')
-c1_lower = np.array([60, 70, 70], dtype='uint8')
+# c1_upper = np.array([74, 180, 150], dtype='uint8')
+# c1_lower = np.array([60, 70, 70], dtype='uint8')
 
-c2_upper = np.array([106, 255, 160], dtype='uint8')
-c2_lower = np.array([95, 100, 100], dtype='uint8')
+# c2_upper = np.array([106, 255, 160], dtype='uint8')
+# c2_lower = np.array([95, 100, 100], dtype='uint8')
 
-c4_upper = np.array([176, 100, 255 ], dtype='uint8')
-c4_lower = np.array([167, 40, 100 ], dtype='uint8')
+# c4_upper = np.array([176, 100, 255 ], dtype='uint8')
+# c4_lower = np.array([167, 40, 100 ], dtype='uint8')
 
-c3_upper = np.array([33, 150, 255], dtype='uint8')
-c3_lower = np.array([30, 0, 100], dtype='uint8')
+# c3_upper = np.array([33, 150, 255], dtype='uint8')
+# c3_lower = np.array([30, 0, 100], dtype='uint8')
 """
 c1_upper = np.array([99, 217, 255], dtype='uint8')
 c1_lower = np.array([90, 60, 60], dtype='uint8')
@@ -107,14 +107,17 @@ while True:
     
     #line drawing
     cv2.line(frame, c1_centroid, c2_centroid, [255,0,0], 3)
-    cv2.line(frame, c2_centroid, c3_centroid, [255,0,0], 3)
+    cv2.line(frame, c2_centroid, c4_centroid, [255,0,0], 3)
     #cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
     
+    filtered_image = cv2.putText(filtered_image, str(math_helpers.angle_finder(c1_centroid, c2_centroid, c4_centroid)), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 
+                   1, (255, 0, 0), 2, cv2.LINE_AA)
+
     #debug
-    #cv2.circle(frame, (int(c2_centroid[0]), int(c3_centroid[1])), 5, [0,255,0], -1)
+    cv2.circle(frame, (int(c4_centroid[0]), int(c4_centroid[1])), 5, [0,255,0], -1)
     #cv2.circle(frame, (int(c2_centroid[0]), int(c4_centroid[1])), 5, [0,0,255], -1)
     
-    print(math_helpers.angle_finder(c1_centroid, c2_centroid, c3_centroid))
+    #print(math_helpers.angle_finder(c1_centroid, c2_centroid, c3_centroid))
     
     cv2.imshow("Webcam", frame)
     cv2.imshow("Filter", filtered_image)
