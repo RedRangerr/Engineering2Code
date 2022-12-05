@@ -4,7 +4,6 @@ import math
 #a->(x,y) point
 #b->(x,y) point
 #c->(x,y) point
-#d->(x,y) point
 def angle_finder(a, b, c):
     #calculate intersection point between line from A and line from C 
     ab_vec = (a[0]-b[0], a[1]-b[1])

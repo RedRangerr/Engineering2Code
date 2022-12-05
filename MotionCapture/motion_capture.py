@@ -4,6 +4,10 @@
 
 import cv2, numpy as np
 import math_helpers
+import time
+import csv
+import os
+import datetime
 #Function for mouse clicks
 def mouseClick(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -25,18 +29,16 @@ def centroid_finder(input_image, output_image):
     return [int(centroid_x), int(centroid_y)]
 
 cap = cv2.VideoCapture(0) #0 is webcam number
-#color 1(green)
-c1_upper = np.array([73, 150, 200], dtype='uint8')
-c1_lower = np.array([60, 30, 100], dtype='uint8')
-#color 2(teal)
-c2_upper = np.array([106, 255, 150], dtype='uint8')
-c2_lower = np.array([93, 120, 30], dtype='uint8')
-#color 3(yellow)
-c3_upper = np.array([24, 150, 255], dtype='uint8')
-c3_lower = np.array([20, 70, 100], dtype='uint8')
+#color 1(blue)
+c1_upper = np.array([106, 255, 220], dtype='uint8')
+c1_lower = np.array([95, 110, 50], dtype='uint8')
+#color 2(green)
+c3_upper = np.array([170, 140, 240], dtype='uint8')
+c3_lower = np.array([160, 50, 100], dtype='uint8')
+#color 3(pink)
+c2_upper = np.array([75, 190, 220], dtype='uint8')
+c2_lower = np.array([67, 60, 70], dtype='uint8')
 #color 4(pink)
-c4_upper = np.array([176, 100, 200 ], dtype='uint8')
-c4_lower = np.array([167, 40, 80 ], dtype='uint8')
 
 #My colors
 # c1_upper = np.array([74, 180, 150], dtype='uint8')
@@ -64,6 +66,37 @@ c4_upper = np.array([62, 150, 175], dtype='uint8')
 c4_lower = np.array([30, 45, 45], dtype='uint8')
 """
 
+#data recording
+
+angle_data_dict = {}
+start_time = time.time()
+record_rate_seconds = 1
+last_recorded_time =  start_time
+
+def add_entry(angle):
+    global last_recorded_time
+    time_cur = time.time()
+    if time_cur >= last_recorded_time + record_rate_seconds:
+        angle_data_dict[int(time_cur - start_time)] = angle
+        last_recorded_time = time_cur
+    
+def save_angle_data(file_name):
+    print(os.getcwd())
+
+    # if not os.path.isdir(os.getcwd()+'AngleData'):
+    #     os.makedirs(os.path.join(os.getcwd(),'AngleData'))
+    #split the file name into a root and an extension
+    root, ext = os.path.splitext(file_name)
+    #adds any extra suffixes specified in the extra parameter. This is used to save the original and grey images and have them have a 
+    #suffix at the end of their original name(eg. IMAGENAME_greyimage.jpeg)
+    ext = ".csv"
+    #root += datetime.today.strftime('%Y-%m-%d %H:%M:%S')
+    file_path = root+ext
+    with open(file_path,'x') as file:
+       writer = csv.writer(file)
+       writer.writerow(['Elapsed Time(seconds)', 'Angle Measured(degrees)'])
+       for key, value in angle_data_dict.items():
+            writer.writerow([key, value])
 
 cv2.namedWindow("Webcam")
 cv2.namedWindow("Filter")
@@ -90,31 +123,26 @@ while True:
     c3_mask = cv2.erode(c3_mask, kernel, iterations=1)
     c3_filter = cv2.bitwise_or(frame, frame, mask=c3_mask)
 
-    #create 4th filter
-    c4_mask = cv2.inRange(frame_hsv, c4_lower, c4_upper)
-    c4_mask = cv2.erode(c4_mask, kernel, iterations=1)
-    c4_filter = cv2.bitwise_or(frame, frame, mask=c4_mask)
 
     #create filtered image
     filtered_image = cv2.bitwise_or(c1_filter, c2_filter)
     filtered_image = cv2.bitwise_or(filtered_image, c3_filter)
-    filtered_image = cv2.bitwise_or(filtered_image, c4_filter)
     #centroid calculation
     c1_centroid = centroid_finder(c1_mask, filtered_image)
     c2_centroid = centroid_finder(c2_mask, filtered_image)
     c3_centroid = centroid_finder(c3_mask, filtered_image)
-    c4_centroid = centroid_finder(c4_mask, filtered_image)
     
     #line drawing
     cv2.line(frame, c1_centroid, c2_centroid, [255,0,0], 3)
-    cv2.line(frame, c2_centroid, c4_centroid, [255,0,0], 3)
+    cv2.line(frame, c2_centroid, c3_centroid, [255,0,0], 3)
     #cv2.line(frame, c3_centroid, c4_centroid, [255,0,0], 3)
-    
-    filtered_image = cv2.putText(filtered_image, str(math_helpers.angle_finder(c1_centroid, c2_centroid, c4_centroid)), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 
+    angle_cur = math_helpers.angle_finder(c1_centroid, c2_centroid, c3_centroid)
+    filtered_image = cv2.putText(filtered_image, str(angle_cur), (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 
                    1, (255, 0, 0), 2, cv2.LINE_AA)
 
+    add_entry(angle_cur)
+
     #debug
-    cv2.circle(frame, (int(c4_centroid[0]), int(c4_centroid[1])), 5, [0,255,0], -1)
     #cv2.circle(frame, (int(c2_centroid[0]), int(c4_centroid[1])), 5, [0,0,255], -1)
     
     #print(math_helpers.angle_finder(c1_centroid, c2_centroid, c3_centroid))
@@ -127,3 +155,6 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 
+print(angle_data_dict)
+file_name = input("What do you want to name the angle data file?(No extension needed)")
+save_angle_data(file_name)
