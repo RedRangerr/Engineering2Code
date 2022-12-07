@@ -75,6 +75,12 @@ cv2.createTrackbar('Blue', 'Filtered', 20, 30, lambda x:None)
 cv2.createTrackbar('Pink', 'Filtered', 20, 30, lambda x:None)
 cv2.createTrackbar('Green', 'Filtered', 20, 30, lambda x:None)
 
+cv2.setTrackbarPos('Blue', 'Filtered', 0)
+cv2.setTrackbarPos('Pink', 'Filtered', 0)
+cv2.setTrackbarPos('Green', 'Filtered', 0)
+
+
+
 
 keypressed = 0
 kernel = numpy.ones((3, 3), numpy.uint8)
@@ -83,17 +89,23 @@ kernel = numpy.ones((3, 3), numpy.uint8)
 current_target = target
 
 def switch_target():
-    if current_target == target_angle:
+    global current_target
+    global target
+    print("Current target: "+str(current_target), "Target Angle: "+str(target))
+    if current_target == target:
         current_target = 170
     else:
         current_target = target
+    print("New target: "+str(current_target))
 
-def number_in_range(range, number, target):
-    bound1 = target + range
-    bound2 = target - range
+def number_in_range(r, number, target):
+    bound1 = target - r
+    bound2 = target + r
     if number >= bound1 and number <= bound2:
-        return True
-    return False 
+        return "In Range"
+    elif number < bound1:
+        return "Low"
+    return "High"
 
 
 
@@ -138,22 +150,24 @@ while keypressed != 27:
     c1_cent = centroidFinder(c1_mask, frame)
     c2_cent = centroidFinder(c2_mask, frame)
     c3_cent = centroidFinder(c3_mask, frame)
-         
+
+    #calculate the current joint anglw
     angle = round(angle_finder(c1_cent, c2_cent, c3_cent))
    
-    if angle > target_angle[0]:
-        line_color = (0, 225, 255)
-    elif angle < target_angle[1]:
-        line_color = (0, 0, 255)
-    else:
-        line_color = (0, 255, 0)
+    line_color = (0, 225, 255)
+    # if angle > target_angle[0]:
+    #     line_color = (0, 225, 255)
+    # elif angle < target_angle[1]:
+    #     line_color = (0, 0, 255)
+    # else:
+    #     line_color = (0, 255, 0)
+
     
-    if angle >= current_target:
-        print("In range")
+
     #target angle
-    if number_in_range(5, angle, current_target):
+    if number_in_range(5, angle, current_target) == "In Range":
         print("Hit target of "+str(current_target))
-        #switch_target()
+        switch_target()
         
 
     cv2.line(frame, (c1_cent[0], c1_cent[1]), (c2_cent[0], c2_cent[1]), line_color , 3) #line color, line thickness
@@ -169,7 +183,7 @@ while keypressed != 27:
     font = cv2.FONT_HERSHEY_SIMPLEX
     fontScale = 1
     printed_angle = cv2.putText(frame, str(angle), coordinates, font, fontScale, (255,255,255), 1, cv2.LINE_AA)
-
+    target_angle = cv2.putText(frame, "Target angle:"+str(current_target), coordinates, font, fontScale, (255,255,255), 1, cv2.LINE_AA)
                                
 
  
