@@ -58,13 +58,13 @@ def distance(p1, p2):
     return math.sqrt(x*x + y*y)
 
 print("'0' = internal camera. '1' = external camera. ")
-camera = input("Which camera would you like to use?: ")
+camera = int(input("Which camera would you like to use?: "))
 target = int(input("Enter your target angle: "))
 
 target_angle = [int(target)+5, int(target)-5]
 
 # initialize webcam
-cap = cv2.VideoCapture(0) #argument is webcam num
+cap = cv2.VideoCapture(camera) #argument is webcam num
 
 # Windows...
 cv2.namedWindow("Webcam")
@@ -87,13 +87,14 @@ kernel = numpy.ones((3, 3), numpy.uint8)
 
 
 current_target = target
+REST_ANGLE = 180
 
 def switch_target():
     global current_target
     global target
     print("Current target: "+str(current_target), "Target Angle: "+str(target))
     if current_target == target:
-        current_target = 170
+        current_target = REST_ANGLE
     else:
         current_target = target
     print("New target: "+str(current_target))
@@ -183,7 +184,7 @@ while keypressed != 27:
     font = cv2.FONT_HERSHEY_SIMPLEX
     fontScale = 1
     printed_angle = cv2.putText(frame, str(angle), coordinates, font, fontScale, (255,255,255), 1, cv2.LINE_AA)
-    target_angle = cv2.putText(frame, "Target angle:"+str(current_target), coordinates, font, fontScale, (255,255,255), 1, cv2.LINE_AA)
+    target_angle = cv2.putText(frame, "Target angle:"+str(current_target), (50,50), font, fontScale, (0,0,255), 1, cv2.LINE_AA)
                                
 
  
