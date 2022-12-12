@@ -10,7 +10,6 @@ import time
 import os
 import csv
 from pysine import sine
-import threading
 
 
 
