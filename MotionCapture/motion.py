@@ -9,6 +9,8 @@ import math
 import time
 import os
 import csv
+from pysine import sine
+
 #Function for mouse clicks
 def mouseClick(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -232,5 +234,7 @@ cap.release()
 
 #saves angle daTa
 print(angle_data_dict)
-file_name = input("What do you want to name the angle data file?(No extension needed)")    
+file_name = input("What do you want to name the angle data file?(No extension needed)")   
+while os.path.exists(file_name+".csv"):
+    file_name += "`" 
 save_angle_data(file_name, angle_data_dict)
