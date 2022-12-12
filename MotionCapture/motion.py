@@ -135,7 +135,6 @@ def number_in_range(r, number, target):
     return "High"
 
 
-
 while keypressed != 27:
    
     #creating colors
@@ -190,13 +189,19 @@ while keypressed != 27:
     #     line_color = (0, 255, 0)
 
     
-
+    range_status = number_in_range(5, angle, current_target)
     #target angle
-    if number_in_range(5, angle, current_target) == "In Range":
+    if range_status == "In Range":
+        line_color = (0, 255, 0)
         print("Hit target of "+str(current_target))
         add_entry(angle)
         switch_target()
-        
+    
+    if angle <= target:
+        line_color = (0, 0, 255)
+
+       
+
 
     cv2.line(frame, (c1_cent[0], c1_cent[1]), (c2_cent[0], c2_cent[1]), line_color , 3) #line color, line thickness
     cv2.line(frame, (c2_cent[0], c2_cent[1]), (c3_cent[0], c3_cent[1]), line_color , 3) #line color, line thickness
