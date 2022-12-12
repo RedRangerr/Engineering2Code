@@ -10,6 +10,9 @@ import time
 import os
 import csv
 from pysine import sine
+import threading
+
+
 
 #Function for mouse clicks
 def mouseClick(event, x, y, flags, params):
@@ -126,6 +129,7 @@ def switch_target():
     else:
         current_target = target
     print("New target: "+str(current_target))
+    sine(duration=0.1)
 
 def number_in_range(r, number, target):
     bound1 = target - r
