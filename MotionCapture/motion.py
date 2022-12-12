@@ -6,8 +6,9 @@
 import cv2
 import numpy
 import math
-
-
+import time
+import os
+import csv
 #Function for mouse clicks
 def mouseClick(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -38,7 +39,32 @@ def blue(x):
     return(cv2.getTrackbarPos('Blue', 'Filtered')+x)
 
 
+angle_data_dict = {0:0}
+start_time = time.time()
 
+def add_entry(angle):
+    global last_recorded_time
+    time_cur = time.time()
+    angle_data_dict[int(time_cur - start_time)] = angle
+
+#saves a dictionary to a csv file
+def save_angle_data(file_name, dict):
+    print(os.getcwd())
+
+    # if not os.path.isdir(os.getcwd()+'AngleData'):
+    #     os.makedirs(os.path.join(os.getcwd(),'AngleData'))
+    #split the file name into a root and an extension
+    root, ext = os.path.splitext(file_name)
+    #adds any extra suffixes specified in the extra parameter. This is used to save the original and grey images and have them have a 
+    #suffix at the end of their original name(eg. IMAGENAME_greyimage.jpeg)
+    ext = ".csv"
+    #root += datetime.today.strftime('%Y-%m-%d %H:%M:%S')
+    file_path = root+ext
+    with open(file_path,'x') as file:
+       writer = csv.writer(file)
+       writer.writerow(['Elapsed Time(seconds)', 'Angle Measured(degrees)'])
+       for key, value in dict.items():
+            writer.writerow([key, value])
 
 #Function finds slope of lines
 def angle_finder(a, b, c):
@@ -168,6 +194,7 @@ while keypressed != 27:
     #target angle
     if number_in_range(5, angle, current_target) == "In Range":
         print("Hit target of "+str(current_target))
+        add_entry(angle)
         switch_target()
         
 
@@ -197,3 +224,8 @@ while keypressed != 27:
 # turn off webcam
 cv2.destroyAllWindows()
 cap.release()
+
+#saves angle daTa
+print(angle_data_dict)
+file_name = input("What do you want to name the angle data file?(No extension needed)")    
+save_angle_data(file_name, angle_data_dict)
