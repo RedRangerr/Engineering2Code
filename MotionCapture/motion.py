@@ -1,6 +1,7 @@
 # Physical Therapy Motion Capture Device Script
 # Eng 4
 # Bowie HS
+#Elliot, Siddhu, Jake
 
 # import libraries
 import cv2
@@ -155,133 +156,179 @@ cv2.setTrackbarPos('Blue', 'Filtered', 0)
 cv2.setTrackbarPos('Pink', 'Filtered', 0)
 cv2.setTrackbarPos('Green', 'Filtered', 0)
 
-
+#variable that stores what key is pressed
 keypressed = 0
+#variable that stores data about eroding the image
 kernel = numpy.ones((3, 3), numpy.uint8)
 
-
+#variable that stores the current angle the user needs to reach. The user must move their thumb back and forth between a rest angle and a target angle.
+#The user will start at an angle of 180 degrees, then move it to the target angle inputted by the user, then the user will have to move back to an angle of 180 degrees 
 current_target = target
+#angle that the user has to go to after it hits the target angle
 REST_ANGLE = 180
 
+#switches the user's current target angle to the opposite.
 def switch_target():
+    #get access to the variables defined above
     global current_target
     global target
     print("Current target: "+str(current_target), "Target Angle: "+str(target))
+    #if the current target is the angle given by the user, switch to the rest angle
+    #otherwise, switch the target angle to the angle given by the user
     if current_target == target:
         current_target = REST_ANGLE
     else:
         current_target = target
     print("New target: "+str(current_target))
+    #play a sound indicating the user has hit the current target and needs to switch
     sine(duration=0.1)
 
-def number_in_range(r, number, target):
-    bound1 = target - r
-    bound2 = target + r
+#checks if a number is in range of a target
+#margin_of_error -> margin of error acceptable between the target and the given number
+#number -> the number that we are testing to see if it is in range of a target
+#target -> the target that we are checking to see if our given input falls in range of
+def number_in_range(margin_of_error, number, target):
+    #create bounds based on our target and margin of error
+    bound1 = target - margin_of_error
+    bound2 = target + margin_of_error
+    #checks if the number is in range of the bounds
+    #if it is, it returns "In Range", 
+    # if it is lower than bound1 it returns "Low", 
+    # if it is higher than bound2 it returns "High"
     if number >= bound1 and number <= bound2:
         return "In Range"
     elif number < bound1:
         return "Low"
     return "High"
 
-
+#while we dont press the exit key
 while keypressed != 27:
    
-    #creating colors
-    c1_upper = [blue(99), 255, 255] #HIGH DIVE
+    #create hsv color bounds for the color HIGH DIVE(blue)
+    c1_upper = [blue(99), 255, 255] #
     c1_lower = [blue(94)-10, 110, 50]
+    #converts the upper and lower bounds of the HIGH DIVE color to numpy arrays
     c1_upper = numpy.array(c1_upper, dtype = "uint8")
     c1_lower = numpy.array(c1_lower, dtype = "uint8")
 
-    c3_upper = [pink(173), 140, 255] #LITTLE PRINCESS
-    c3_lower = [pink(163)-10, 45, 100]
-    c3_upper = numpy.array(c3_upper, dtype = "uint8")
-    c3_lower = numpy.array(c3_lower, dtype = "uint8")
-
+    #create hsv color bounds for the color GARDEN STROLL(green)
     c2_upper = [green(83), 120, 220]  #GARDEN STROLL
     c2_lower = [green(73)-10, 60, 70]
+    #create hsv color bounds for the color GARDEN STROLL(green)
     c2_upper = numpy.array(c2_upper, dtype = "uint8")
     c2_lower = numpy.array(c2_lower, dtype = "uint8")
 
 
-    # Captures image from camera
+    #create hsv color bounds for the color LITTLE PRINCESS(pink)
+    c3_upper = [pink(173), 140, 255] #LITTLE PRINCESS
+    c3_lower = [pink(163)-10, 45, 100]
+    #converts the upper and lower bounds of the LITTLE PRINCESS color to numpy arrays
+    c3_upper = numpy.array(c3_upper, dtype = "uint8")
+    c3_lower = numpy.array(c3_lower, dtype = "uint8")
+
+    
+    # Captures image from webcam
     ret, frame = cap.read()
    
-    #create HSV image
+    #converts the frame to HSV from BGR
     frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
    
+    #create a color mask that filters out all colors except those in range of the HIGH DIVE(blue) color and erodes it with the kernel variable defined previously
     c1_mask = cv2.inRange(frame_hsv, c1_lower, c1_upper)
     c1_mask = cv2.erode(c1_mask, kernel, iterations = 1)
+    #create a color mask that filters out all colors except those in range of the GARDEN STROLL(green) color and erodes it with the kernel variable defined previously
     c2_mask = cv2.inRange(frame_hsv, c2_lower, c2_upper)
     c2_mask = cv2.erode(c2_mask, kernel, iterations = 1)
+    #create a color mask that filters out all colors except those in range of the LITTLE PRINCESS(pink) color and erodes it with the kernel variable defined previously
     c3_mask = cv2.inRange(frame_hsv, c3_lower, c3_upper)
     c3_mask = cv2.erode(c3_mask, kernel, iterations = 1)
    
-   
+    #create a image that only contains the blue color in the original frame
+    #by combing the original frame with itself then applying the blue mask created above
     c1_filter = cv2.bitwise_or(frame, frame, mask = c1_mask)
+    #create a image that only contains the green color in the original frame
+    #by combing the original frame with itself then applying the green mask created above
     c2_filter = cv2.bitwise_or(frame, frame, mask = c2_mask)
+    #create a image that only contains the pink color in the original frame
+    #by combing the original frame with itself then applying the pink mask created above
     c3_filter = cv2.bitwise_or(frame, frame, mask = c3_mask)
    
-   
+    #calculate the center cordinates of the blue color 
     c1_cent = centroidFinder(c1_mask, frame)
+    #calculate the center cordinates of the green color 
     c2_cent = centroidFinder(c2_mask, frame)
+    #calculate the center cordinates of the pink color 
     c3_cent = centroidFinder(c3_mask, frame)
 
-    #calculate the current joint anglw
+    #calculate the current joint angle by passing in the centers of each color as a point then rounding it to get rid of decimals
     angle = round(angle_finder(c1_cent, c2_cent, c3_cent))
-   
-    line_color = (0, 225, 255)
-    # if angle > target_angle[0]:
-    #     line_color = (0, 225, 255)
-    # elif angle < target_angle[1]:
-    #     line_color = (0, 0, 255)
-    # else:
-    #     line_color = (0, 255, 0)
-
     
+    #variable that stores the line color
+    line_color = (0, 225, 255)
+
+
+    #call the range function to see if the angle calculated above is in range of the programs CURRENT target anfle
     range_status = number_in_range(5, angle, current_target)
-    #target angle
+    #if the angle is in range
     if range_status == "In Range":
+        #set the line color to green
         line_color = (0, 255, 0)
-        print("Hit target of "+str(current_target))
+        #call the add entry function which records the calculated angle at the current time
         add_entry(angle)
+        #switches the current target angle to be the oposite
         switch_target()
     
+    #if our calculated angle is less than the angle that the user inputted at the beginning of the program
+    #the user has moved too much which is dangerous
     if angle <= target:
+        #set the angle color to red
         line_color = (0, 0, 255)
 
        
 
-
+    #draw line from the blude centroid to the green centroid
     cv2.line(frame, (c1_cent[0], c1_cent[1]), (c2_cent[0], c2_cent[1]), line_color , 3) #line color, line thickness
+    #draw line from the green centorid to the pink centroid
     cv2.line(frame, (c2_cent[0], c2_cent[1]), (c3_cent[0], c3_cent[1]), line_color , 3) #line color, line thickness
    
    
-   
+    #combine the image that contains only blue color with the image that has only green color 
     combined = cv2.bitwise_or(c1_filter, c2_filter)
+    #combine the new image created above with blue and green with the image that only contains pink
     combined = cv2.bitwise_or(combined, c3_filter)
    
-   
+    #calculate cordinates where the text should be placed for our current angle
     coordinates = (c2_cent[0]+70, c2_cent[1]-70)
+    #set font and fontscale
     font = cv2.FONT_HERSHEY_SIMPLEX
     fontScale = 1
+    #place text that shows out current angle at the cordinates previosuly calculated
     printed_angle = cv2.putText(frame, str(angle), coordinates, font, fontScale, (255,255,255), 1, cv2.LINE_AA)
+    #show the current target angle(the angle the user needs to currently reach) in the top left corner
     target_angle = cv2.putText(frame, "Target angle:"+str(current_target), (50,50), font, fontScale, (0,0,255), 1, cv2.LINE_AA)
                                
 
  
    
-    # Place image, refresh
+    #Show our main webcam in a cv2 window
     cv2.imshow("Webcam", frame)
+    #show the image that only has our colors in a different cv2 window
     cv2.imshow("Filtered", combined)
+    #wait 70 milliseconds for a keypress, the record whatever key was pressed. If it was the esc key, the while loop will terminate.
     keypressed = cv2.waitKey(70)
 
 # turn off webcam
 cv2.destroyAllWindows()
+#dispose of the capture
 cap.release()
 
 #saves angle daTa
 print(angle_data_dict)
+#prompt the user to enter a name to save the angle data
 file_name = input("What do you want to name the angle data file?(No extension needed)")   
+#while the file path exists, add a tilda to the name so the program doens't crash 
+# if we are trying to save a file with a name already taken by another file
 while os.path.exists(file_name+".csv"):
     file_name += "`" 
+#call the save angle function where we pass in the file_name given by the user and the angle_data dictionary, which we are going to save into a csv file
 save_angle_data(file_name, angle_data_dict)
