@@ -13,16 +13,25 @@ from pysine import sine
 
 
 
-#Function for mouse clicks
+#Function for keyboard events on a cv2 window
+#event -> button that was pressed
+#x -> x position of cordinate mouse pointer is currently at
+#y -> y position of cordinate mouse pointer is currently at
 def mouseClick(event, x, y, flags, params):
+    #check if buton pressed is a left mouse button being pressed
     if event == cv2.EVENT_LBUTTONDOWN:
+        #get the pixel color in hsv from the x an y position of the mouse click and print it
         hsv = frame_hsv[y,x]
         print("The mouse was clicked at x= ", x, "y = ", y)
         print("Hue = ", hsv[0],  "Sat = ", hsv[1], "Val = ", hsv[2])
-       
+
+#finds the centroid of an image of a specific color and draws it on the screen
+#input_image -> image that has a single color blob
+#output image -> image that the center should be drawn to
 def centroidFinder(input_image, output_image):
+    #calculuate moments of image
     moments = cv2.moments(input_image)
-   
+   #calculate x and y cordinate of centroid based on the moments
     if moments["m00"] == 0:
         centroid_x = 1
         centroid_y = 1
@@ -30,33 +39,49 @@ def centroidFinder(input_image, output_image):
         centroid_x = moments["m10"]/moments["m00"]
         centroid_y = moments["m01"]/moments["m00"]
        
-       
+    #draw the centroid on the output image
     cv2.circle(output_image, (int(centroid_x), int(centroid_y)), 5, (255, 255, 255), -1)
    
+    #return the x and y cordinate as a tuple
     return int(centroid_x), int(centroid_y)
 
+#get the current value of the green color for filtering
+#x-> base green value
 def green(x):
+    #return the green trackbar value added to the base green value
     return(cv2.getTrackbarPos('Green', 'Filtered')+x)
+
+#get the current value of the pink color for filtering
+#x-> base pink value
 def pink(x):
+    #return the pink trackbar value added to the base green value
     return(cv2.getTrackbarPos('Pink', 'Filtered')+x)
+
+#get the current value of the blue color for filtering
+#x-> base blue value
 def blue(x):
+    #return the blue trackbar value added to the base green value
     return(cv2.getTrackbarPos('Blue', 'Filtered')+x)
 
-
-angle_data_dict = {0:0}
+#initalize dictionary that stores the current angle of the joint at specific timestamps
+angle_data_dict = {}
+#get the time when the program first runs. This is used to convert the current time relative to when the program started
 start_time = time.time()
 
+#adds an entry to the dictionary
+#angle -> value of the angle to record
 def add_entry(angle):
-    global last_recorded_time
+    #get current time
     time_cur = time.time()
-    angle_data_dict[int(time_cur - start_time)] = angle
+    #get the amount of time that has passed since the program first ran
+    elasped_time = int(time_cur - start_time)
+    #record the data of the anfgle in the dictionary
+    angle_data_dict[elasped_time] = angle
 
 #saves a dictionary to a csv file
+#file_name -> name of the file to save the dictionary as
+#dict -> dictionary to save as a csv
 def save_angle_data(file_name, dict):
-    print(os.getcwd())
-
-    # if not os.path.isdir(os.getcwd()+'AngleData'):
-    #     os.makedirs(os.path.join(os.getcwd(),'AngleData'))
     #split the file name into a root and an extension
     root, ext = os.path.splitext(file_name)
     #adds any extra suffixes specified in the extra parameter. This is used to save the original and grey images and have them have a 
@@ -64,52 +89,71 @@ def save_angle_data(file_name, dict):
     ext = ".csv"
     #root += datetime.today.strftime('%Y-%m-%d %H:%M:%S')
     file_path = root+ext
+    #open the file safely
     with open(file_path,'x') as file:
+       #create a new instance of the csv writer
        writer = csv.writer(file)
+       #write the headings to the file
        writer.writerow(['Elapsed Time(seconds)', 'Angle Measured(degrees)'])
+       #write all the keys and values in the dictioanry to the csv file
        for key, value in dict.items():
             writer.writerow([key, value])
 
-#Function finds slope of lines
+#Function finds the angle that 3 points make up
+#a -> point a
+#b -> point b
+#c -> point c
 def angle_finder(a, b, c):
-    #calc intersection point
+    #Create two different vectors from the three points
     ab_vec = (a[0]-b[0], a[1]-b[1])
     bc_vec = (c[0]-b[0], c[1]-b[1])
+    #calculate the dot product of the two vectors via the x and y components
     dot_product = ab_vec[0] * bc_vec[0] + ab_vec[1] * bc_vec[1]
     try:
+        #solve for the angle using the alternate formula of the dot product(ABcos(theta))
+        #calculate the cosine of the angle by dividing the dot_product by the 
+        #product of the magnitudes of the two vectors which are aquired with the distance function below
         costheta = dot_product/(distance(a,b)* distance(b,c))
         return math.degrees(math.acos(costheta))
     except:
+        #handles division by 0 error if the distance is 0
         return 0
 
+#calculates the distance of two points via the distance formula(sqrt((x-x0)^2 + (y-y0)^2))
+#p1 -> point 1
+#p2 -> point 2
 def distance(p1, p2):
+    #get the x difference of the points
     x = p1[0] - p2[0]
+    #get the y difference of the points
     y = p1[1] - p2[1]
+    #use the distance formula to get the distance
     return math.sqrt(x*x + y*y)
 
+#ask and store what camera the user wants to use
 print("'0' = internal camera. '1' = external camera. ")
 camera = int(input("Which camera would you like to use?: "))
+#ask the user what their target angle is and store it
 target = int(input("Enter your target angle: "))
-
+#create a range of the target angle based on the user input
 target_angle = [int(target)+5, int(target)-5]
 
-# initialize webcam
+# initialize webcam with camera user inputed
 cap = cv2.VideoCapture(camera) #argument is webcam num
 
-# Windows...
+#Set up  Windows for the webcam and the color filter
 cv2.namedWindow("Webcam")
 cv2.namedWindow("Filtered")
+#sets a mouse callback for the webcam when you click on it
 cv2.setMouseCallback("Webcam", mouseClick, param = None)
-image = cv2.imread("Webcam")
+#create trackbars for the different colors 
 cv2.createTrackbar('Blue', 'Filtered', 20, 30, lambda x:None)
 cv2.createTrackbar('Pink', 'Filtered', 20, 30, lambda x:None)
 cv2.createTrackbar('Green', 'Filtered', 20, 30, lambda x:None)
-
+#sets the trackbar psoitions to 0
 cv2.setTrackbarPos('Blue', 'Filtered', 0)
 cv2.setTrackbarPos('Pink', 'Filtered', 0)
 cv2.setTrackbarPos('Green', 'Filtered', 0)
-
-
 
 
 keypressed = 0
